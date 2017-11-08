@@ -8,11 +8,12 @@ var bodyParser = require('body-parser');
 var index = require('./routes/index');
 var users = require('./routes/users');
 var items = require('./routes/items');
+var contexts = require('./routes/contexts');
 
 var app = express();
 
 var mongoose = require('mongoose');
-var dev_db_url = 'mongodb://localhost/mylibrary'
+var dev_db_url = 'mongodb://localhost/mylibrary';
 var mongoDB = process.env.MONGODB_URI || dev_db_url;
 mongoose.connect(mongoDB);
 var db = mongoose.connection;
@@ -33,6 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/users', users);
 app.use('/ifc', items);
+app.use('/catalog/ifc',contexts);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
