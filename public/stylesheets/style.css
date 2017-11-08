@@ -1,8 +1,28 @@
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-a {
-  color: #00B7FF;
+
+/**
+导航条的高度，背景色
+ */
+.nav-custom {
+  min-height: 4rem;
+  background-color: #563d7c
+
 }
+
+/**
+导航条的
+ */
+.navbar-light .navbar-brand {
+  color: #fff;
+}
+
+/*.jumbotron p {*/
+  /*margin-top: 50px;*/
+  /*margin-bottom: 15px;*/
+  /*font-size: 21px;*/
+  /*font-weight: 200;*/
+/*}*/
+

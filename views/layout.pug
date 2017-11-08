@@ -1,26 +1,40 @@
 doctype html
 html(lang='cn-zh')
   head
-    title= title
-    link(rel='stylesheet', href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ", crossorigin="anonymous")
-    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js')
-    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
+    title BIM
+    link(rel='stylesheet', href="https://cdn.bootcss.com/bootstrap/4.0.0-beta/css/bootstrap.min.css")
+    script(src='https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js')
+    script(src='https://cdn.bootcss.com/popper.js/1.12.5/umd/popper.js')
+    script(src='https://cdn.bootcss.com/bootstrap/4.0.0-beta/css/bootstrap-grid.min.css')
 
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
-    nav(class='navbar navbar-toggleable-md navbar-light bg-faded')
+    nav(class='navbar fixed-top navbar-expand-lg navbar-dark nav-custom')
+      a(class="navbar-brand" href="#")
+        img(src='../images/icon.jpg' width="40" height="40" class="rounded-circle")
+      a(class="navbar-brand" href="#") BIM构件库
+
+
       button(class="navbar-toggler navbar-toggler-right", type="button", data-toggle="collapse", data-target="#navbarSupportedContent", aria-controls="navbarSupportedContent", aria-expanded="false", aria-label="Toggle navigation")
         span(class='navbar-toggler-icon')
-      a(class = 'navbar-brand') BIM构件库
+
 
       div(class = 'collapse navbar-collapse', id='navbarSupportedContent')
         ul(class='navbar-nav mr-auto')
           li(class='nav-item active')
-            a(class="nav-link" href="#")
+            a(class="nav-link" href="#") 主页
+              span(class='sr-only')(current)
+          li(class='nav-item' href="#")
+            a(class="nav-link" href="#") 构件库
+          li(class='nav-item' href="#")
+            a(class="nav-link" href="#") 别的
+          li(class='nav-item' href="#")
+            a(class="nav-link" href="#") 什么
+          li(class='nav-item' href="#")
+            a(class="nav-link" href="#") 功能
 
-        form(class = 'form-inline my-2 my-lg-0')
-          input(class = 'form-control mr-sm-2', type='text', placeholder='Search')
-          button(class='btn btn-outline-success my-2 my-sm-0', type='submit') 搜索
+
+
 
     div(class="alert alert-primary", role="alert") This is a primary alert with  Give it a click if you like.
     block content
