@@ -11,11 +11,11 @@ var ItemSchema = Schema(
     }
 );
 
-// Virtual for author's URL
+// Virtual for IFC's URL
 ItemSchema
     .virtual('url')
     .get(function () {
-        return '/catalog/author/' + this._id;
+        return '/catalog/ifc/' + this.name;
     });
 
 //Export model
