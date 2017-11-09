@@ -6,7 +6,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
-var users = require('./routes/users');
 var items = require('./routes/items');
 var contexts = require('./routes/contexts');
 
@@ -33,7 +32,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static('public'));
 
 app.use('/', index);
-app.use('/users', users);
 app.use('/ifc', items);
 app.use('/catalog/ifc',contexts);
 
