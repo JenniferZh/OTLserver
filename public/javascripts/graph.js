@@ -3,29 +3,35 @@ var links = [];
 //add cur and it parent
 var parent_list = cur.parents;
 for(var i = 0; i < parent_list.length; i++) {
-    links.push({source: parent_list[i], target: cur.name, type:"1"});
+    links.push({source: parent_list[i], target: cur.name, group:1});
 }
 
 var child_list = cur.child;
 for(var i = 0; i < child_list.length; i++) {
-    links.push({source: cur.name, target: child_list[i], type:'2'});
+    links.push({source: cur.name, target: child_list[i], group:2});
 }
 
 for(var i = 0; i < child.length; i++) {
     this_item = child[i];
     this_item_child = this_item.child;
     for(var j = 0; j < this_item_child.length; j++) {
-        links.push({source: this_item.name, target: this_item_child[j], type:'3'});
+        links.push({source: this_item.name, target: this_item_child[j], group:2});
     }
 }
+
 
 var nodes = {};
 
 // Compute the distinct nodes from the links.
 links.forEach(function(link) {
-    link.source = nodes[link.source] || (nodes[link.source] = {name: link.source});
-    link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
+    link.source = nodes[link.source] || (nodes[link.source] = {name: link.source, group: link.group});
+    link.target = nodes[link.target] || (nodes[link.target] = {name: link.target, group: link.group});
 });
+
+nodes[cur.name].group = 3;
+
+
+var color = d3.scale.category10();
 
 var width = 960,
     height = 500;
@@ -57,12 +63,14 @@ var node = svg.selectAll(".node")
     .call(force.drag);
 
 node.append("circle")
-    .attr("r", 8);
+    .attr("r", 8)
+    .style("fill", function(d) { console.log('d: ', d); return color(d.group); });
 
 node.append("text")
     .attr("x", 12)
     .attr("dy", ".35em")
-    .text(function(d) { return d.name; });
+    .text(function(d) { return d.name; })
+    .style("fill", function(d) { return color(d.group); });
 
 function tick() {
     link
