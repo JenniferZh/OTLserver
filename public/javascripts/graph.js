@@ -11,6 +11,14 @@ for(var i = 0; i < child_list.length; i++) {
     links.push({source: cur.name, target: child_list[i], type:'2'});
 }
 
+for(var i = 0; i < child.length; i++) {
+    this_item = child[i];
+    this_item_child = this_item.child;
+    for(var j = 0; j < this_item_child.length; j++) {
+        links.push({source: this_item.name, target: this_item_child[j], type:'3'});
+    }
+}
+
 var nodes = {};
 
 // Compute the distinct nodes from the links.
@@ -26,7 +34,7 @@ var force = d3.layout.force()
     .nodes(d3.values(nodes))
     .links(links)
     .size([width, height])
-    .linkDistance(60)
+    .linkDistance(110)
     .charge(-300)
     .on("tick", tick)
     .start();
