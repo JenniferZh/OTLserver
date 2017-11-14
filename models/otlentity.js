@@ -19,4 +19,4 @@ ItemSchema
     });
 
 //Export model
-module.exports = mongoose.model('Item', ItemSchema);
+module.exports = mongoose.model('Item', ItemSchema, 'Items');

@@ -3,7 +3,7 @@
  */
 var MongoClient = require('mongodb').MongoClient,
     fs = require('fs'),
-    url = 'mongodb://zym:zym@ds245755.mlab.com:45755/library666';
+    url = 'mongodb://localhost/mylibrary';
 
 var json = JSON.parse(fs.readFileSync('test.json', 'utf8'));
 // console.log(json)
