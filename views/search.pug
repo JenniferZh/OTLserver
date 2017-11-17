@@ -1,4 +1,15 @@
 extends layout
 
 block content
-    h1 #{title}
+
+
+    div(class = 'row')
+        h1(class='my-3 col-md-10 offset-md-1') 搜索结果
+    each val in search_result
+        div(class = 'row')
+            div(class = 'alert alert-success p-3 col-md-10 offset-md-1' role=alert)
+                h4 #{val.name}
+                p 这里是一些描述
+                hr
+                a(href=val.url) http://www.cbims.org.cn#{val.url}
+
