@@ -6,8 +6,12 @@ var Schema = mongoose.Schema;
 var ItemSchema = Schema(
     {
         name:{type:String, required:true},
-        child:{type:[String]},
-        parents:{type:[String]}
+        childs:{type:[String]},
+        parent:{type:String},
+        parent_list:{type:[String]},
+        attr:{type:[String]},
+        attr_all:{type:[String]}
+
     }
 );
 

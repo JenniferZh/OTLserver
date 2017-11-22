@@ -5,12 +5,12 @@ var MongoClient = require('mongodb').MongoClient,
     fs = require('fs'),
     url = 'mongodb://localhost/mylibrary';
 
-var json = JSON.parse(fs.readFileSync('test.json', 'utf8'));
+var json = JSON.parse(fs.readFileSync('test3.json', 'utf8'));
 // console.log(json)
 
-var saveItem = function(db, name, child, parents) {
+var saveItem = function(db, name, childs, parent, parent_list, attr, attr_all) {
     return new Promise(function (resolve, reject) {
-        db.collection('Items').insert({name:name, child:child, parents:parents}, function(err, result) {
+        db.collection('Items').insert({name:name, childs:childs, parent:parent, parent_list:parent_list, attr:attr, attr_all:attr_all}, function(err, result) {
             if (err) {
                 reject(err);
             } else {
@@ -26,7 +26,7 @@ MongoClient.connect(url, function (err, db) {
     } else {
         var itemPromises = [];
         for(var value in json)
-            itemPromises.push(saveItem(db, value, json[value].child, json[value].parents));
+            itemPromises.push(saveItem(db, value, json[value].child, json[value].parent, json[value].parentlist, json[value].attr, json[value].attr_all));
         Promise.all(itemPromises).then(function () {
             db.close();
         })
