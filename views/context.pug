@@ -9,9 +9,10 @@ block content
 
                 ul(class='nav nav-pills flex-column')
 
-                    each val in parent_item
-                        li(class='nav-item')
-                            a(class='nav-link', href=val.url) #{val.name}
+
+                    li(class='nav-item')
+                        if parent_item != null
+                            a(class='nav-link', href=parent_item.url) #{parent_item.name}
                     li(class='nav-item')
                         a(class='nav-link active', href=curitem.url)
                             img(src="https://cdn.bootcss.com/open-iconic/1.1.1/png/chevron-right.png" alt='chevron-right')
@@ -38,13 +39,18 @@ block content
                             tr
                                 td(width='20%', class='text-center') 父类
                                 td
-                                    each val in parent_item
+                                    each val in parent_list
                                         a(href=val.url, class='badge badge-info', id='alink') #{val.name}
                             tr
                                 td(width='20%', class='text-center') 子类
                                 td
                                     each val in child_item
                                         a(href=val.url, class='badge badge-info', id='alink') #{val.name}
+                            tr
+                                td(width='20%', class='text-center') 属性
+                                td
+                                    each val in curitem.attr
+                                        span(class='badge badge-primary', id='alink') #{val}
 
                     div(class='tab-pane fade', id='nav-graph', role='tabpanel', aria-labelledby='nav-graph-tab')
                         script(src='/javascripts/graph.js')

@@ -24,7 +24,7 @@ exports.context_detail = function (req, res, next) {
                 if (err) {
                     reject(err);
                 } else {
-                    Item.find({name: {$in: person.child}}, function (err, childs) {
+                    Item.find({name: {$in: person.childs}}, function (err, childs) {
                         if (err) {
                             reject(err);
                         } else {
@@ -36,13 +36,31 @@ exports.context_detail = function (req, res, next) {
         });
     };
 
-    var getParents = function (itemName) {
+    var getParent = function (itemName) {
         return new Promise(function(resolve, reject){
             Item.findOne({name: itemName}, function (err, person) {
                 if (err) {
                     reject(err);
                 } else {
-                    Item.find({name: {$in: person.parents}}, function (err, parents) {
+                    Item.findOne({name: person.parent}, function (err, parents) {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(parents);
+                        }
+                    })
+                }
+            });
+        });
+    };
+
+    var getParentList = function (itemName) {
+        return new Promise(function(resolve, reject){
+            Item.findOne({name: itemName}, function (err, person) {
+                if (err) {
+                    reject(err);
+                } else {
+                    Item.find({name: {$in: person.parent_list}}, function (err, parents) {
                         if (err) {
                             reject(err);
                         } else {
@@ -56,10 +74,11 @@ exports.context_detail = function (req, res, next) {
 
     var name = req.params.itemName;
 
-    Promise.all([getChilds(name), getParents(name), getItem(name)]).then(function(values){
+    Promise.all([getChilds(name), getParent(name), getItem(name), getParentList(name)]).then(function(values){
 
 
-        res.render('context', { child_item: values[0], parent_item: values[1], curitem: values[2]} );
+        res.render('context', { child_item: values[0], parent_item: values[1], curitem: values[2], parent_list: values[3]} );
+
 
     }).catch(function(error){ console.log(error);});
 

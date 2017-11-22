@@ -26,8 +26,9 @@ exports.item_detail = function (req, res, next) {
         else{
             var detail = new Object();
             detail.name = results.item[0].name;
-            detail.parents = results.item[0].parents;
+            detail.parents = results.item[0].parent;
             detail.child = results.item[0].child;
+            detail.parent_list = result.item[0].attr;
             res.send(detail);
         }
 

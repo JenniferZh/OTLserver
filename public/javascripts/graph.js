@@ -1,19 +1,17 @@
 var links = [];
 
 //add cur and it parent
-var parent_list = cur.parents;
-for(var i = 0; i < parent_list.length; i++) {
-    links.push({source: parent_list[i], target: cur.name, group:1});
-}
+var parent = cur.parent;
+links.push({source: parent, target:cur.name, group:1});
 
-var child_list = cur.child;
+var child_list = cur.childs;
 for(var i = 0; i < child_list.length; i++) {
     links.push({source: cur.name, target: child_list[i], group:2});
 }
 
 for(var i = 0; i < child.length; i++) {
     this_item = child[i];
-    this_item_child = this_item.child;
+    this_item_child = this_item.childs;
     for(var j = 0; j < this_item_child.length; j++) {
         links.push({source: this_item.name, target: this_item_child[j], group:2});
     }
