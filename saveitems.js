@@ -18,7 +18,7 @@ var saveItem = function(db, name, childs, parent, parent_list, attr, attr_all) {
             }
         });
     });
-}
+};
 
 MongoClient.connect(url, function (err, db) {
     if(err) {
