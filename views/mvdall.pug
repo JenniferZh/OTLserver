@@ -1,0 +1,12 @@
+extends layout
+
+block content
+    div(class = 'row')
+        h1(class='my-3 col-md-10 offset-md-1') MVD
+    each val in mvdlist
+        div(class = 'row')
+            div(class = 'alert alert-success p-3 col-md-10 offset-md-1' role=alert)
+                h4 #{val.name}
+                p #{val.ns}
+                hr
+                a(href=val.url) http://www.cbims.org.cn#{val.url}

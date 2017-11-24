@@ -10,6 +10,7 @@ var index = require('./routes/index');
 var items = require('./routes/items');
 var contexts = require('./routes/contexts');
 var search = require('./routes/search');
+var mvd = require('./routes/mvds');
 
 var app = express();
 
@@ -39,6 +40,7 @@ app.use('/', index);
 app.use('/ifc', items);
 app.use('/catalog/ifc',contexts);
 app.use('/search', search);
+app.use('/mvd', mvd);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
