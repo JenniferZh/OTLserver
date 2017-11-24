@@ -1,0 +1,39 @@
+extends layout
+
+block content
+    script window.mvd = !{JSON.stringify(mvd)}
+    script window.templist = !{JSON.stringify(templist)}
+    div(class = 'row')
+        div(class = 'my-3 col-md-8 offset-md-2')
+            h1(class='item-header') #{mvd.name}
+            nav(class='nav nav-tabs pt-3', id='mytab', role='tablist')
+                a(class='nav-item nav-link active', id='nav-info-tab', data-toggle="tab", href='#nav-info', role='tab', aria-controls='nav-info', aria-selected='true') 基本信息
+                a(class='nav-item nav-link', id='nav-graph-tab', data-toggle="tab", href='#nav-graph', role='tab', aria-controls='nav-info', aria-selected='true') 图形显示
+            div(class='tab-content pt-3', id='nav-tabContent')
+                div(class='tab-pane fade show active', id='nav-info', role='tabpanel', aria-labelledby='nav-info-tab')
+                    table(width="100%",class='namevalue')
+                        tr
+                            td(width="20%", class='text-center') 名称
+                            td #{mvd.name}
+                        tr
+                            td(width="20%", class='text-center') UUID
+                            td #{mvd.uuid}
+                        tr
+                            td(width='20%', class='text-center') URL
+                            td http://cbims.org.cn#{mvd.url}
+                        tr
+                            td(width='20%', class='text-center') 名字空间
+                            td #{mvd.ns}
+                        tr
+                            td(width='20%', class='text-center') 包含模板
+                            td
+                                each val in templist
+                                    span(href=val.url, class='badge badge-info', id='alink') #{val.templateName}
+                        tr
+                            td(width='20%', class='text-center') 规定实体
+                            td
+                                each val in templist
+                                    span(class='badge badge-primary', id='alink') #{val.name}
+
+                div(class='tab-pane fade', id='nav-graph', role='tabpanel', aria-labelledby='nav-graph-tab')
+                    script(src='/javascripts/template.js')
