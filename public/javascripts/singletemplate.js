@@ -1,71 +1,8 @@
-var conceptTemplates = templist;
+root = temp;
 
-var myMap = new Map();
-
-for(var i = 0; i < conceptTemplates.length; i++) {
-    myMap.set(conceptTemplates[i].uuid, conceptTemplates[i]);
-}
-
-
-
-function traversal(template) {
-    //如果说到这一层有ref的话，从myMap中找到ref，挂在后面
-    if(template.ref != undefined && template.ref != 'done') {
-        var uuid = template.ref;
-        var tempobj = myMap.get(uuid);
-
-
-
-        template.children = tempobj.children;
-        template.ref = 'done';
-    }
-
-    for(var i = 0; i < template.children.length; i++) {
-        traversal(template.children[i]);
-    }
-}
-
-var mySet = new Set();
-
-/**
- * 遍历所有的第二层以及以后，把出现的实体都放在一个集合里
- * @param temp
- */
-function trans(temp) {
-    mySet.add(temp.name);
-    for(var i = 0; i < temp.children.length; i++) {
-        trans(temp.children[i]);
-    }
-}
-
-for(var i = 0; i < conceptTemplates.length; i++) {
-    traversal(conceptTemplates[i]);
-    //console.log(JSON.stringify(conceptTemplates[i]));
-}
-
-for(var i = 0; i < conceptTemplates.length; i++) {
-    var childs = conceptTemplates[i].children;
-    for(var j = 0; j < childs.length; j++) {
-        trans(childs[j]);
-    }
-}
-
-var child = [];
-
-for(var i = 0; i < conceptTemplates.length; i++) {
-    if(!mySet.has(conceptTemplates[i].name))
-        child.push(conceptTemplates[i]);
-
-}
-
-var all = {};
-all.name = 'templates';
-all.children = child;
-
-// ************** Generate the tree diagram	 *****************
 var margin = {top: 20, right: 120, bottom: 20, left: 120},
-    width = 1400 - margin.right - margin.left,
-    height = 800 - margin.top - margin.bottom;
+    width = 900 - margin.right - margin.left,
+    height = 700 - margin.top - margin.bottom;
 
 var i = 0,
     duration = 750,

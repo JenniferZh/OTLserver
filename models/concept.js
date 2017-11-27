@@ -17,7 +17,7 @@ var ConceptSchema = Schema(
 ConceptSchema
     .virtual('url')
     .get(function () {
-        return '/mvd/concept/' + this.uuid;
+        return '/template/' + this.uuid;
     });
 
 //Export model

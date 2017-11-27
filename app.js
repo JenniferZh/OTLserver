@@ -11,6 +11,7 @@ var items = require('./routes/items');
 var contexts = require('./routes/contexts');
 var search = require('./routes/search');
 var mvd = require('./routes/mvds');
+var template = require('./routes/templates');
 
 var app = express();
 
@@ -41,6 +42,7 @@ app.use('/ifc', items);
 app.use('/catalog/ifc',contexts);
 app.use('/search', search);
 app.use('/mvd', mvd);
+app.use('/template', template);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
