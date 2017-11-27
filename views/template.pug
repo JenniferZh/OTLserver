@@ -4,7 +4,7 @@ block content
     script window.temp = !{JSON.stringify(temp)}
     //script window.templist = !{JSON.stringify(templist)}
     div(class = 'row')
-        div(class = 'my-3 col-md-8 offset-md-2')
+        div(class = 'my-3 col-md-10 offset-md-1')
             h1(class='item-header') #{temp.templateName}
             nav(class='nav nav-tabs pt-3', id='mytab', role='tablist')
                 a(class='nav-item nav-link active', id='nav-info-tab', data-toggle="tab", href='#nav-info', role='tab', aria-controls='nav-info', aria-selected='true') 基本信息
@@ -24,8 +24,10 @@ block content
 
                         tr
                             td(width='20%', class='text-center') 规定实体
-                            td #{temp.name}
+                            td
+                                a(href='/catalog/ifc/' + temp.name class='badge badge-primary', id='alink') #{temp.name}
+
 
 
                 div(class='tab-pane fade', id='nav-graph', role='tabpanel', aria-labelledby='nav-graph-tab')
-                    //script(src='/javascripts/template.js')
+                    script(src='/javascripts/singletemplate.js')

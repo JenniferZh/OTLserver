@@ -1,5 +1,7 @@
 body {
-  padding-top: 67px;
+    padding-top: 67px;
+    overflow-x: hidden;
+
 }
 /**
 右边导航链接字体颜色

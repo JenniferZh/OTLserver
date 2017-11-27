@@ -1,8 +1,8 @@
-root = temp;
 
-var margin = {top: 20, right: 120, bottom: 20, left: 120},
-    width = 900 - margin.right - margin.left,
-    height = 700 - margin.top - margin.bottom;
+
+var margin = {top: 20, right: 120, bottom: 20, left: 180},
+    width = 800 - margin.right - margin.left,
+    height = 600 - margin.top - margin.bottom;
 
 var i = 0,
     duration = 750,
@@ -20,7 +20,7 @@ var svg = d3.select("#nav-graph").append("svg")
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-root = all;
+root = temp;
 root.x0 = height / 2;
 root.y0 = 0;
 
@@ -35,7 +35,7 @@ function update(source) {
         links = tree.links(nodes);
 
     // Normalize for fixed-depth.
-    nodes.forEach(function(d) { d.y = d.depth * 140; });
+    nodes.forEach(function(d) { d.y = d.depth * 180; });
 
     // Update the nodes…
     var node = svg.selectAll("g.node")
