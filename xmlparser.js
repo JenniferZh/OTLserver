@@ -26,8 +26,13 @@ parseMVD(doc);
 
 
 
-console.log(infos);
-console.log(conceptTemplates);
+//console.log(infos);
+//console.log(conceptTemplates);
+
+
+
+
+
 
 /**
  * 数据库操作
@@ -66,6 +71,10 @@ MongoClient.connect(url, function (err, db) {
         console.error(err);
     } else {
         var itemPromises = [];
+
+        //令这两个collection检查uuid,如果重复将不会重复放入
+        db.collection('MVDs').createIndex({uuid:1},{unique:true});
+        db.collection('Templates').createIndex({uuid:1},{unique:true});
 
         for(var i = 0; i < infos.length; i++) {
             itemPromises.push(saveMVD(db, infos[i].name, infos[i].ns, infos[i].uuid, infos[i].templates));
