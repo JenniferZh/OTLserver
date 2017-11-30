@@ -1,8 +1,8 @@
 var fs = require('fs');
 var DOMParser = require('xmldom').DOMParser;
+
 var infos = [];
 var conceptTemplates = [];
-
 
 
 /**
@@ -17,9 +17,8 @@ var conceptTemplates = [];
 xml = fs.readFileSync('mvd\\katalog.mvdxml', {encoding: 'utf-8'});
 doc = new DOMParser().parseFromString(xml);
 
-parseModelView(doc);
 
-//parseMVD(doc);
+parseMVD(doc);
 
 // xml = fs.readFileSync('mvd\\example.xml', {encoding: 'utf-8'});
 // doc = new DOMParser().parseFromString(xml);
@@ -27,13 +26,8 @@ parseModelView(doc);
 // parseMVD(doc);
 
 
-
 //console.log(infos);
 //console.log(conceptTemplates);
-
-
-
-
 
 
 /**
@@ -42,9 +36,9 @@ parseModelView(doc);
 
 var MongoClient = require('mongodb').MongoClient, url = 'mongodb://localhost/mylibrary';
 
-var saveMVD = function(db, name, ns, uuid, templates) {
+var saveCollection = function (db, collection, content) {
     return new Promise(function (resolve, reject) {
-        db.collection('MVDs').insert({name:name, ns:ns, uuid:uuid, templates:templates}, function(err, result) {
+        db.collection(collection).insert(content, function (err, result) {
             if (err) {
                 reject(err);
             } else {
@@ -54,36 +48,23 @@ var saveMVD = function(db, name, ns, uuid, templates) {
     });
 };
 
-var saveTemplate = function (db, name, uuid, templateName, type, children) {
-    return new Promise(function(resolve, reject) {
-        db.collection('Templates').insert({name: name, uuid: uuid, templateName:templateName, type:type, children: children}, function (err, result) {
-            if(err) {
-                reject(err);
-            } else {
-                resolve(result);
-            }
-
-        })
-    });
-
-};
 
 // MongoClient.connect(url, function (err, db) {
-//     if(err) {
+//     if (err) {
 //         console.error(err);
 //     } else {
 //         var itemPromises = [];
 //
 //         //令这两个collection检查uuid,如果重复将不会重复放入
-//         db.collection('MVDs').createIndex({uuid:1},{unique:true});
-//         db.collection('Templates').createIndex({uuid:1},{unique:true});
+//         db.collection('MVDs').createIndex({uuid: 1}, {unique: true});
+//         db.collection('Templates').createIndex({uuid: 1}, {unique: true});
 //
-//         for(var i = 0; i < infos.length; i++) {
-//             itemPromises.push(saveMVD(db, infos[i].name, infos[i].ns, infos[i].uuid, infos[i].templates));
+//         for (var i = 0; i < infos.length; i++) {
+//             itemPromises.push(saveCollection(db, 'MVDs', infos[i]));
 //         }
 //
-//         for(var i = 0; i < conceptTemplates.length; i++) {
-//             itemPromises.push(saveTemplate(db, conceptTemplates[i].name, conceptTemplates[i].uuid, conceptTemplates[i].templateName, conceptTemplates[i].type, conceptTemplates[i].children));
+//         for (var i = 0; i < conceptTemplates.length; i++) {
+//             itemPromises.push(saveCollection(db, 'Templates', conceptTemplates[i]));
 //         }
 //
 //         Promise.all(itemPromises).then(function () {
@@ -95,77 +76,101 @@ var saveTemplate = function (db, name, uuid, templateName, type, children) {
 // });
 
 
-
-/**
- * 一个mvdxml文件中可能有很多个conceptTemplate
- * 需要存储在数据库里的有两个信息：
- * 1.mvdmxl的相关信息，包括mvd的名称(name)，uuid，namespace(xmlns),和template-uuid:list，放在一个collection里
- * 2.所有的conceptTemplate的json,放在一个collection里
- * @param doc
- */
 function parseMVD(doc) {
-    /**
-     * 提取mvd信息
-     */
-    var mvdinfo = {};
 
-    //console.log(doc.documentElement);
-
+    var mvd_store = {};
     var mvd = doc.documentElement;
 
-
-    mvdinfo.name = mvd.getAttributeNode('name').nodeValue;
-    mvdinfo.ns = mvd.getAttributeNode('xmlns').nodeValue;
-    mvdinfo.uuid = mvd.getAttributeNode('uuid').nodeValue;
-    mvdinfo.templates = [];
-
-
-    /**
-     * 先提取出所有拥有applicableEntity的conceptTemplate
-     * @type {NodeList}
-     */
-    var templates =doc.documentElement.getElementsByTagName('ConceptTemplate');
+    //解析属性
+    mvd_store.name = mvd.getAttributeNode('name').nodeValue;
+    mvd_store.ns = mvd.getAttributeNode('xmlns').nodeValue;
+    mvd_store.uuid = mvd.getAttributeNode('uuid').nodeValue;
+    mvd_store.templates = [];
+    mvd_store.views = [];
 
 
+    var conceptTemplates = mvd.getElementsByTagName('ConceptTemplate');
 
-    //a list of xml Element
-    var templist = [];
-
-    for(var i = 0; i < templates.length; i++) {
-        //console.log(templates[i].nodeName)
-        if(templates[i].hasAttribute('applicableEntity'))
-            templist.push(templates[i]);
+    for(var i = 0; i < conceptTemplates.length; i++) {
+        mvd_store.templates.push(conceptTemplates[i].getAttributeNode('uuid').nodeValue);
+        parseTemplate(conceptTemplates[i]);
     }
 
-    for(var i = 0; i < templist.length; i++) {
-        var tmp = parseTemplate(templist[i]);
-        conceptTemplates.push(tmp);
-        //console.log(JSON.stringify(parseTemplate(templist[i])));
-        mvdinfo.templates.push(tmp.uuid);
+
+    var childs = mvd.childNodes;
+    for (var i = 0; i < childs.length; i++) {
+
+        if (childs[i].nodeName == 'Views') {
+            var mvlist = childs[i].childNodes;
+
+            for(var j = 0; j < mvlist.length; j++) {
+                mvd_store.views.push(mvlist[j].getAttributeNode('uuid').nodeValue);
+            }
+
+        }
+
     }
 
-    infos.push(mvdinfo);
-
+    console.log(mvd_store);
 }
 
 
 function parseTemplate(template) {
+
+
     var temp = {};
-    temp.name = template.getAttributeNode('applicableEntity').nodeValue;
+    temp.type = 'entity';
+    temp.children = [];
+
+    //一定有的属性：uuid, name, applicableSchema
     temp.uuid = template.getAttributeNode('uuid').nodeValue;
     temp.templateName = template.getAttributeNode('name').nodeValue;
-    temp.type = 'entity';
-    
-    var rules = template.getElementsByTagName('Rules')[0];
-    
-    if(rules == undefined) {
-        console.log('conceptTemplate中没有Rules元素，虽然这是不科学的');
+    temp.applicableSchema = template.getAttributeNode('applicableSchema').nodeValue;
+
+    //可能有的属性：applicabelEntity
+    if(template.hasAttribute('applicableEntity')) {
+        temp.applicableEntity = template.getAttributeNode('applicableEntity').nodeValue;
+    } else {
+        temp.applicableEntity = 'undefined';
+        temp.type = 'template';
     }
-    //提取出每个AttributeRule标签，解析
-    temp.children = [];
-    for(var i = 0; i < rules.childNodes.length; i++) {
-        temp.children.push(parseAttributeRule(rules.childNodes[i]));
+
+    //为了画图产生的属性
+    temp.name = temp.applicableEntity;
+
+
+
+    //可能有的属性：def, subtemplates, rules
+
+    var childs = template.childNodes;
+
+    for(var i = 0; i < childs.length; i++) {
+        if(childs[i].nodeName == 'Definitions')
+            temp.def = parseDefinitions(childs[i]);
+        if(childs[i].nodeName == 'Rules') {
+
+            for(var j = 0; j < childs[i].childNodes.length; j++)
+                temp.children.push(parseAttributeRule(childs[i].childNodes[j]));
+
+        }
+        if(childs[i].nodeName == 'SubTemplates') {
+            temp.subtemplates = [];
+            var subtemplates = childs[i].childNodes;
+            temp.type = temp.type + 'sub';
+
+            for(var j = 0; j < subtemplates.length; j++) {
+
+                if(subtemplates[j].nodeName == 'ConceptTemplate') {
+                    var pushin = parseTemplate(subtemplates[j]);
+                    console.log(JSON.stringify(pushin));
+                    temp.subtemplates.push(pushin);
+                    temp.children.push(pushin);
+                }
+            }
+        }
     }
+
+    //console.log(JSON.stringify(temp));
     return temp;
 }
 
@@ -175,17 +180,35 @@ function parseAttributeRule(attribute) {
     temp.children = [];
     temp.type = 'attribute';
 
-    var rules = attribute.getElementsByTagName('EntityRules')[0];
+    if(attribute.hasAttribute('RuleID'))
+        temp.ruleid = attribute.getAttributeNode('RuleID').nodeValue;
 
-    //如果attributerule里不再嵌套entityrule
-    if(rules == undefined) {
+    var rules = attribute.childNodes;
+
+    if(rules.length == 0) {
         return temp;
     } else {
-        for(var i = 0; i < rules.childNodes.length; i++) {
-            temp.children.push(parseEntityRule(rules.childNodes[i]));
+        for(var i = 0; i < rules[0].childNodes.length; i++) {
+            temp.children.push(parseEntityRule(rules[0].childNodes[i]));
         }
         return temp;
     }
+
+
+    //
+    //
+    //
+    // var rules = attribute.getElementsByTagName('EntityRules')[0];
+    //
+    // //如果attributerule里不再嵌套entityrule
+    // if (rules == undefined) {
+    //     return temp;
+    // } else {
+    //     for (var i = 0; i < rules.childNodes.length; i++) {
+    //         temp.children.push(parseEntityRule(rules.childNodes[i]));
+    //     }
+    //     return temp;
+    // }
 }
 
 function parseEntityRule(entity) {
@@ -195,23 +218,20 @@ function parseEntityRule(entity) {
     temp.type = 'entity';
 
 
-
-    if(entity.childNodes[0] != undefined && entity.childNodes[0].nodeName == 'References') {
+    if (entity.childNodes[0] != undefined && entity.childNodes[0].nodeName == 'References') {
         temp.ref = entity.childNodes[0].childNodes[0].getAttributeNode('ref').nodeValue;
     }
 
     var rules = entity.getElementsByTagName('Attributes')[0];
 
-    if(rules == undefined) {
+    if (rules == undefined) {
         return temp;
     } else {
-        for(var i = 0; i < rules.childNodes.length; i++) {
+        for (var i = 0; i < rules.childNodes.length; i++) {
             temp.children.push(parseAttributeRule(rules.childNodes[i]));
         }
         return temp;
     }
-
-
 
 
     return temp;
@@ -220,56 +240,50 @@ function parseEntityRule(entity) {
 
 function parseModelView(doc) {
 
-    /**
-     * 先提取出所有的ModelView
-     */
-    var modelviews = doc.documentElement.getElementsByTagName('ModelView');
-
-    for(var i = 0; i < modelviews.length; i++) {
-        var modelview = {};
-
-        //提取modelview的属性, uuid,name,applicableSchema认为是一定有的属性
-        modelview.uuid = modelviews[i].getAttributeNode('uuid').nodeValue;
-        modelview.name = modelviews[i].getAttributeNode('name').nodeValue;
-        modelview.applicableSchma = modelviews[i].getAttributeNode('applicableSchema').nodeValue;
-
-        //有些是可选的属性，目前支持code, status；其他见文档
-        if (modelviews[i].getAttributeNode('code') == undefined) {
-            modelview.code = 'undefined';
-        } else {
-            modelview.code = modelviews[i].getAttributeNode('code').nodeValue;
-        }
-
-        if (modelviews[i].getAttributeNode('status') == undefined) {
-            modelview.status = 'undefined';
-        } else {
-            modelview.status = modelviews[i].getAttributeNode('status').nodeValue;
-        }
-
-        //解析modelview的子节点，Definition,ExchangeRequirements,Roots
-        var childs = modelviews[i].childNodes;
-
-        for(var i= 0; i < childs.length; i++) {
-
-            if(childs[i].nodeName == 'Definitions') {
-                modelview.def = parseDefinitions(childs[i]);
-            }
-            if(childs[i].nodeName == 'ExchangeRequirements') {
-                modelview.exr = parseExchangeRequirements(childs[i]);
-            }
-            if(childs[i].nodeName == 'Roots') {
-                modelview.roots = parseRoots(childs[i]);
-            }
-        }
+    var mview = doc.documentElement;
 
 
+    var modelview = {};
 
-        console.log(JSON.stringify(modelview));
-        //console.log(modelview.roots[0].def);
+    //提取modelview的属性, uuid,name,applicableSchema认为是一定有的属性
+    modelview.uuid = mview.getAttributeNode('uuid').nodeValue;
+    modelview.name = mview.getAttributeNode('name').nodeValue;
+    modelview.applicableSchma = mview.getAttributeNode('applicableSchema').nodeValue;
 
-
-
+    //有些是可选的属性，目前支持code, status；其他见文档
+    if (mview.getAttributeNode('code') == undefined) {
+        modelview.code = 'undefined';
+    } else {
+        modelview.code = mview.getAttributeNode('code').nodeValue;
     }
+
+    if (mview.getAttributeNode('status') == undefined) {
+        modelview.status = 'undefined';
+    } else {
+        modelview.status = mview.getAttributeNode('status').nodeValue;
+    }
+
+    //解析modelview的子节点，Definition,ExchangeRequirements,Roots
+    var childs = mview.childNodes;
+
+    for (var i = 0; i < childs.length; i++) {
+
+        if (childs[i].nodeName == 'Definitions') {
+            modelview.def = parseDefinitions(childs[i]);
+        }
+        if (childs[i].nodeName == 'ExchangeRequirements') {
+            modelview.exr = parseExchangeRequirements(childs[i]);
+        }
+        if (childs[i].nodeName == 'Roots') {
+            modelview.roots = parseRoots(childs[i]);
+        }
+    }
+
+
+
+
+    console.log(JSON.stringify(modelview));
+    return modelview;
 
 }
 
@@ -291,21 +305,21 @@ function parseDefinitions(def) {
     var defs = def.childNodes;
 
     //解析每一个definition, 现只支持解析body
-    for(var i = 0; i < defs.length; i++) {
+    for (var i = 0; i < defs.length; i++) {
         var defcontent = defs[i].childNodes;
 
         var def = {};
 
-        for(var j = 0; j < defcontent.length; j++) {
-            if(defcontent[j].nodeName == 'Body') {
+        for (var j = 0; j < defcontent.length; j++) {
+            if (defcontent[j].nodeName == 'Body') {
 
                 //console.log(defcontent[j].childNodes[0]);
-                if(defcontent[j].childNodes[0] == undefined)
+                if (defcontent[j].childNodes[0] == undefined)
                     def.content = "undefined";
                 else
                     def.content = defcontent[j].childNodes[0].nodeValue;
                 def.lang = 'en';
-                if(defcontent[j].hasAttribute('lang'))
+                if (defcontent[j].hasAttribute('lang'))
                     def.lang = defcontent[j].getAttributeNode('lang').nodeValue;
 
             }
@@ -341,7 +355,7 @@ function parseExchangeRequirements(exrs) {
 
     var exrms = exrs.childNodes;
     //对于每一条exchangerequirement
-    for(var i = 0; i < exrms.length; i++) {
+    for (var i = 0; i < exrms.length; i++) {
         var exrm = exrms[i];
 
         var require = {};
@@ -349,13 +363,13 @@ function parseExchangeRequirements(exrs) {
         require.uuid = exrm.getAttributeNode('uuid').nodeValue;
         require.name = exrm.getAttributeNode('name').nodeValue;
 
-        if(exrm.hasAttribute('applicability')) {
+        if (exrm.hasAttribute('applicability')) {
             require.applicability = exrm.getAttributeNode('applicability').nodeValue;
         } else {
             require.applicability = 'undefined';
         }
 
-        if(exrm.hasAttribute('code')) {
+        if (exrm.hasAttribute('code')) {
             require.code = exrm.getAttributeNode('code').nodeValue;
         } else {
             require.code = 'undefined';
@@ -363,8 +377,8 @@ function parseExchangeRequirements(exrs) {
 
         var child = exrm.childNodes;
 
-        for(var j = 0; j < child.length; j++) {
-            if(child[j].nodeName == 'Definitions')
+        for (var j = 0; j < child.length; j++) {
+            if (child[j].nodeName == 'Definitions')
                 require.def = parseDefinitions(child[j]);
         }
 
@@ -380,7 +394,7 @@ function parseRoots(roots) {
 
     var conceptroots = roots.childNodes;
     //对于每一条ConceptRoot
-    for(var i = 0; i < conceptroots.length; i++) {
+    for (var i = 0; i < conceptroots.length; i++) {
         var conceptroot = conceptroots[i];
 
         var root = {};
@@ -392,12 +406,12 @@ function parseRoots(roots) {
 
         var childs = conceptroot.childNodes;
 
-        for(var j = 0; j < childs.length; j++) {
-            if(childs[j].nodeName == 'Definitions')
+        for (var j = 0; j < childs.length; j++) {
+            if (childs[j].nodeName == 'Definitions')
                 root.def = parseDefinitions(childs[j]);
-            if(childs[j].nodeName == 'Applicability')
+            if (childs[j].nodeName == 'Applicability')
                 root.applicability = parseApplicability(childs[j]);
-            if(childs[j].nodeName == 'Concepts')
+            if (childs[j].nodeName == 'Concepts')
                 root.concepts = parseConcepts(childs[j]);
         }
 
@@ -422,13 +436,13 @@ function parseApplicability(app) {
     var childs = app.childNodes;
 
     //applicability中包含Template和TemplateRules
-    for(var i = 0; i < childs.length; i++) {
-        if(childs[i].nodeName == 'Template') {
+    for (var i = 0; i < childs.length; i++) {
+        if (childs[i].nodeName == 'Template') {
 
             app_store.ref = childs[i].getAttributeNode('ref').nodeValue;
         }
 
-        if(childs[i].nodeName == 'TemplateRules') {
+        if (childs[i].nodeName == 'TemplateRules') {
             app_store.rules = parseTemplateRules(childs[i]);
         }
     }
@@ -444,10 +458,10 @@ function parseTemplateRules(rules) {
     var allrules = rules.childNodes;
     var rule_list = [];
 
-    for(var i = 0; i < allrules.length; i++) {
-        if(allrules[i].nodeName == 'TemplateRules')
+    for (var i = 0; i < allrules.length; i++) {
+        if (allrules[i].nodeName == 'TemplateRules')
             rule_list.push(parseTemplateRules(allrules[i]));
-        if(allrules[i].nodeName == 'TemplateRule')
+        if (allrules[i].nodeName == 'TemplateRule')
             rule_list.push({parameters: allrules[i].getAttributeNode('Parameters').value})
     }
 
@@ -476,19 +490,19 @@ function parseConcepts(concepts) {
     var cons = concepts.childNodes;
 
     //对于每一个concept
-    for(var i = 0; i < cons.length; i++) {
+    for (var i = 0; i < cons.length; i++) {
         var concept = {};
         concept.uuid = cons[i].getAttributeNode('uuid').nodeValue;
         concept.name = cons[i].getAttributeNode('name').nodeValue;
 
         var childs = cons[i].childNodes;
 
-        for(var j = 0; j < childs.length; j++) {
-            if(childs[j].nodeName == "Definitions")
+        for (var j = 0; j < childs.length; j++) {
+            if (childs[j].nodeName == "Definitions")
                 concept.def = parseDefinitions(childs[j]);
-            if(childs[j].nodeName == 'Requirements')
+            if (childs[j].nodeName == 'Requirements')
                 concept.req = parseRequirements(childs[j]);
-            if(childs[j].nodeName == 'TemplateRules')
+            if (childs[j].nodeName == 'TemplateRules')
                 concept.rules = parseTemplateRules(childs[j]);
         }
         concept_list.push(concept);
@@ -513,7 +527,7 @@ function parseConcepts(concepts) {
 function parseRequirements(requires) {
     var require_list = [];
 
-    for(var i = 0; i < requires.childNodes.length; i++) {
+    for (var i = 0; i < requires.childNodes.length; i++) {
         var child = requires.childNodes[i];
         var require = {};
         require.applicability = child.getAttributeNode('applicability').nodeValue;

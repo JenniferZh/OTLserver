@@ -1,5 +1,3 @@
-
-
 var margin = {top: 20, right: 120, bottom: 20, left: 180},
     width = 800 - margin.right - margin.left,
     height = 600 - margin.top - margin.bottom;
@@ -30,6 +28,7 @@ d3.select(self.frameElement).style("height", "500px");
 
 function update(source) {
 
+
     // Compute the new tree layout.
     var nodes = tree.nodes(root).reverse(),
         links = tree.links(nodes);
@@ -45,11 +44,25 @@ function update(source) {
     var nodeEnter = node.enter().append("g")
         .attr("class", "node")
         .attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
-        .on("click", click);
+        .on("click", click)
+        .on("mouseover", function(d) {
+            var g = d3.select(this); // The node
+            // The class is used to remove the additional text later
+            var info = g.append('text')
+                .classed('info', true)
+                .attr('x', 20)
+                .attr('y', 20)
+                .text(d.name);
+        })
+        .on("mouseout", function() {
+            // Remove the info text on mouse out.
+            d3.select(this).select('text.info').remove()
+        });
 
     nodeEnter.append("circle")
         .attr("r", 1e-6)
-        .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+        .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; })
+
 
     nodeEnter.append("text")
         .attr("x", function(d) { return d.children || d._children ? -13 : 13; })
@@ -102,6 +115,8 @@ function update(source) {
             return diagonal({source: o, target: o});
         });
 
+
+
     // Transition links to their new position.
     link.transition()
         .duration(duration)
@@ -115,6 +130,39 @@ function update(source) {
             return diagonal({source: o, target: o});
         })
         .remove();
+
+    var linktext = svg.selectAll('g.link')
+        .data(links, function(d) {
+            return d.target.name;
+        });
+
+    linktext.enter()
+        .insert("g")
+        .attr("class", "link")
+        .append("text")
+        .attr("dy", ".35em")
+        .attr("text-anchor", "middle")
+        .text(function (d) {
+            //console.log(d.target.name);
+            return d.target.name;
+        });
+
+    // Transition link text to their new positions
+
+    linktext.transition()
+        .duration(duration)
+        .attr("transform", function (d) {
+            return "translate(" + ((d.source.y + d.target.y) / 2) + "," + ((d.source.x + d.target.x) / 2) + ")";
+        });
+
+    linktext.exit().transition()
+        .remove();
+
+    var div = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+
+
 
     // Stash the old positions for transition.
     nodes.forEach(function(d) {
