@@ -8,7 +8,8 @@ var MvdSchema = Schema(
         name:{type:String, required:true},
         ns:{type:String},
         uuid:{type:String},
-        templates:{type:[String]}
+        templates:{type:[String]},
+        views:{type:[String]}
     }
 );
 

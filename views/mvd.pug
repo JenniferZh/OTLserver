@@ -3,12 +3,14 @@ extends layout
 block content
     script window.mvd = !{JSON.stringify(mvd)}
     script window.templist = !{JSON.stringify(templist)}
+    script window.viewlist = !{JSON.stringify(viewlist)}
     div(class = 'row')
         div(class = 'my-3 col-md-10 offset-md-1')
             h1(class='item-header') #{mvd.name}
             nav(class='nav nav-tabs pt-3', id='mytab', role='tablist')
                 a(class='nav-item nav-link active', id='nav-info-tab', data-toggle="tab", href='#nav-info', role='tab', aria-controls='nav-info', aria-selected='true') 基本信息
                 a(class='nav-item nav-link', id='nav-graph-tab', data-toggle="tab", href='#nav-graph', role='tab', aria-controls='nav-info', aria-selected='true') 图形显示
+                a(class='nav-item nav-link', id='nav-graph2-tab', data-toggle="tab", href='#nav-graph2', role='tab', aria-controls='nav-info', aria-selected='true') ModelView
             div(class='tab-content pt-3', id='nav-tabContent')
                 div(class='tab-pane fade show active', id='nav-info', role='tabpanel', aria-labelledby='nav-info-tab')
                     table(width="100%",class='namevalue')
@@ -30,10 +32,33 @@ block content
                                 each val in templist
                                     a(href=val.url, class='badge badge-info', id='alink') #{val.templateName}
                         tr
-                            td(width='20%', class='text-center') 规定实体
+                            td(width='20%', class='text-center') 适用实体
                             td
                                 each val in templist
                                     a(href='/catalog/ifc/'+val.name class='badge badge-primary', id='alink') #{val.name}
+                        tr
+                            td(width='20%', class='text-center') 包含规则
+                            td
+                                each val in viewlist
+                                    span(class='badge badge-primary', id='alink') #{val.name}
 
                 div(class='tab-pane fade', id='nav-graph', role='tabpanel', aria-labelledby='nav-graph-tab')
-                    script(src='/javascripts/template.js')
+
+                div(class='tab-pane fade', id='nav-graph2', role='tabpanel', aria-labelledby='nav-graph-tab')
+                    table(width="100%",class='namevalue')
+                        tr
+                            td(width="20%", class='text-center') 名称
+                            td #{viewlist[0].name}
+                        tr
+                            td(width="20%", class='text-center') UUID
+                            td #{viewlist[0].uuid}
+                        tr
+                            td(width='20%', class='text-center') Schema
+                            td #{viewlist[0].applicableSchma}
+                        tr
+                            td(width='20%', class='text-center') 内容描述
+                            td #{viewlist[0].def[0].content}
+                    hr
+                    div(id='view-graph')
+                        script(src='/javascripts/template.js')
+

@@ -1,5 +1,6 @@
 var Mvd = require('../models/mvd');
 var Template = require('../models/concept');
+var View = require('../models/modelview');
 
 
 
@@ -21,10 +22,17 @@ exports.more_detail = function (req, res, next) {
         Template.find({uuid: {$in: templist}}, function (err, result) {
             if(err) return handleError(err);
 
-            res.render('mvd',{templist: result, mvd: mvd});
+            viewlist = mvd.views;
+
+            View.find({uuid: {$in: viewlist}}, function (err, result2) {
+                if(err) return handleError(err);
+
+                res.render('mvd',{templist: result, mvd: mvd, viewlist: result2});
+                console.log(result2);
+
+            });
 
         });
 
     });
-
 };

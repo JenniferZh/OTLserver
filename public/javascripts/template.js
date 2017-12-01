@@ -62,6 +62,28 @@ var all = {};
 all.name = 'templates';
 all.children = child;
 
+
+/**
+ * view的数据准备
+ * @type {{top: number, right: number, bottom: number, left: number}}
+ */
+var viewroot = viewlist[0].roots[0];
+
+var viewref = viewroot.applicability.ref;
+
+var targetref = null;
+
+for(var i = 0; i < conceptTemplates.length; i++) {
+    if(conceptTemplates[i].uuid == viewref)
+        targetref = conceptTemplates[i];
+}
+
+targetref.name = viewroot.applicableRootEntity;
+
+
+
+
+
 // ************** Generate the tree diagram	 *****************
 var margin = {top: 20, right: 120, bottom: 20, left: 120},
     width = 1400 - margin.right - margin.left,
@@ -69,9 +91,12 @@ var margin = {top: 20, right: 120, bottom: 20, left: 120},
 
 var i = 0,
     duration = 750,
-    root;
+    root, root2;
 
 var tree = d3.layout.tree()
+    .size([height, width]);
+
+var tree2 = d3.layout.tree()
     .size([height, width]);
 
 var diagonal = d3.svg.diagonal()
@@ -83,18 +108,45 @@ var svg = d3.select("#nav-graph").append("svg")
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+
+var svg2 = d3.select('#view-graph').append('svg')
+    .attr("width", width + margin.right + margin.left)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
 root = all;
 root.x0 = height / 2;
 root.y0 = 0;
 
-update(root);
+root2 = targetref;
+root2.x0 = height / 2;
+root2.y0 = 0;
 
-d3.select(self.frameElement).style("height", "500px");
+var test1 = {
+    root: root,
+    svg: svg
+};
 
-function update(source) {
+var test2 = {
+    root: root2,
+    svg: svg2
+};
+
+//update.apply(test1, root);
+//update.apply(test2, root2);
+update(root, svg, root);
+update(root2, svg2, root2);
+
+
+
+//d3.select(self.frameElement).style("height", "500px");
+
+function update(source, svg, root) {
 
     // Compute the new tree layout.
-    var nodes = tree.nodes(root).reverse(),
+    var nodes = tree.nodes(source).reverse(),
         links = tree.links(nodes);
 
     // Normalize for fixed-depth.
@@ -115,7 +167,8 @@ function update(source) {
         .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
 
     nodeEnter.append("text")
-        .attr("x", function(d) { return d.children || d._children ? -13 : 13; })
+        .attr("x", function(d) { return d.children || d._children ? 5 : 13; })
+        .attr('y', -18)
         .attr("dy", ".35em")
         .attr("text-anchor", function(d) { return d.children || d._children ? "end" : "start"; })
         .text(function(d) { return d.name; })

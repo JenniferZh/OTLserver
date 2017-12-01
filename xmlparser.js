@@ -3,28 +3,31 @@ var DOMParser = require('xmldom').DOMParser;
 
 var infos = [];
 var conceptTemplates = [];
+var views = [];
 
 
 /**
  * 读入mvdmxl，解析，生成相关数据
  * @type {Buffer | string}
  */
-// var xml = fs.readFileSync('mvd\\example2.xml', {encoding: 'utf-8'});
-// var doc = new DOMParser().parseFromString(xml);
-//
-// parseMVD(doc);
+var xml = fs.readFileSync('mvd\\example2.xml', {encoding: 'utf-8'});
+var doc = new DOMParser().parseFromString(xml);
+
+infos.push(parseMVD(doc));
 
 xml = fs.readFileSync('mvd\\katalog.mvdxml', {encoding: 'utf-8'});
 doc = new DOMParser().parseFromString(xml);
 
 
-parseMVD(doc);
+infos.push(parseMVD(doc));
 
-// xml = fs.readFileSync('mvd\\example.xml', {encoding: 'utf-8'});
-// doc = new DOMParser().parseFromString(xml);
-//
-// parseMVD(doc);
+xml = fs.readFileSync('mvd\\example.xml', {encoding: 'utf-8'});
+doc = new DOMParser().parseFromString(xml);
 
+infos.push(parseMVD(doc));
+
+
+//console.log(views);
 
 //console.log(infos);
 //console.log(conceptTemplates);
@@ -49,31 +52,35 @@ var saveCollection = function (db, collection, content) {
 };
 
 
-// MongoClient.connect(url, function (err, db) {
-//     if (err) {
-//         console.error(err);
-//     } else {
-//         var itemPromises = [];
-//
-//         //令这两个collection检查uuid,如果重复将不会重复放入
-//         db.collection('MVDs').createIndex({uuid: 1}, {unique: true});
-//         db.collection('Templates').createIndex({uuid: 1}, {unique: true});
-//
-//         for (var i = 0; i < infos.length; i++) {
-//             itemPromises.push(saveCollection(db, 'MVDs', infos[i]));
-//         }
-//
-//         for (var i = 0; i < conceptTemplates.length; i++) {
-//             itemPromises.push(saveCollection(db, 'Templates', conceptTemplates[i]));
-//         }
-//
-//         Promise.all(itemPromises).then(function () {
-//             db.close();
-//             console.log('done');
-//         })
-//     }
-//
-// });
+MongoClient.connect(url, function (err, db) {
+    if (err) {
+        console.error(err);
+    } else {
+        var itemPromises = [];
+
+        //令这两个collection检查uuid,如果重复将不会重复放入
+        db.collection('MVDs').createIndex({uuid: 1}, {unique: true});
+        db.collection('Templates').createIndex({uuid: 1}, {unique: true});
+
+        // for (var i = 0; i < infos.length; i++) {
+        //     itemPromises.push(saveCollection(db, 'MVDs', infos[i]));
+        // }
+
+        // for (var i = 0; i < conceptTemplates.length; i++) {
+        //     itemPromises.push(saveCollection(db, 'Templates', conceptTemplates[i]));
+        // }
+
+        for(var i = 0; i < views.length; i++) {
+            itemPromises.push(saveCollection(db, 'Views', views[i]));
+        }
+
+        Promise.all(itemPromises).then(function () {
+            db.close();
+            console.log('done');
+        })
+    }
+
+});
 
 
 function parseMVD(doc) {
@@ -93,7 +100,7 @@ function parseMVD(doc) {
 
     for(var i = 0; i < conceptTemplates.length; i++) {
         mvd_store.templates.push(conceptTemplates[i].getAttributeNode('uuid').nodeValue);
-        parseTemplate(conceptTemplates[i]);
+        //parseTemplate(conceptTemplates[i]);
     }
 
 
@@ -103,15 +110,19 @@ function parseMVD(doc) {
         if (childs[i].nodeName == 'Views') {
             var mvlist = childs[i].childNodes;
 
+            console.log(mvlist.length);
+
             for(var j = 0; j < mvlist.length; j++) {
                 mvd_store.views.push(mvlist[j].getAttributeNode('uuid').nodeValue);
+                //console.log(parseModelView(mvlist[j]));
+                views.push(parseModelView(mvlist[j]));
             }
 
         }
 
     }
 
-    console.log(mvd_store);
+    return mvd_store;
 }
 
 
@@ -240,7 +251,10 @@ function parseEntityRule(entity) {
 
 function parseModelView(doc) {
 
-    var mview = doc.documentElement;
+
+
+    var mview = doc;
+    //console.log(mview);
 
 
     var modelview = {};
@@ -491,21 +505,26 @@ function parseConcepts(concepts) {
 
     //对于每一个concept
     for (var i = 0; i < cons.length; i++) {
-        var concept = {};
-        concept.uuid = cons[i].getAttributeNode('uuid').nodeValue;
-        concept.name = cons[i].getAttributeNode('name').nodeValue;
 
-        var childs = cons[i].childNodes;
+        //这里可能夹杂有comment,也被当作子节点，因此先做判断
+        if(cons[i].nodeName == 'Concept') {
+            var concept = {};
 
-        for (var j = 0; j < childs.length; j++) {
-            if (childs[j].nodeName == "Definitions")
-                concept.def = parseDefinitions(childs[j]);
-            if (childs[j].nodeName == 'Requirements')
-                concept.req = parseRequirements(childs[j]);
-            if (childs[j].nodeName == 'TemplateRules')
-                concept.rules = parseTemplateRules(childs[j]);
+            concept.uuid = cons[i].getAttributeNode('uuid').nodeValue;
+            concept.name = cons[i].getAttributeNode('name').nodeValue;
+
+            var childs = cons[i].childNodes;
+
+            for (var j = 0; j < childs.length; j++) {
+                if (childs[j].nodeName == "Definitions")
+                    concept.def = parseDefinitions(childs[j]);
+                if (childs[j].nodeName == 'Requirements')
+                    concept.req = parseRequirements(childs[j]);
+                if (childs[j].nodeName == 'TemplateRules')
+                    concept.rules = parseTemplateRules(childs[j]);
+            }
+            concept_list.push(concept);
         }
-        concept_list.push(concept);
     }
 
     return concept_list;
