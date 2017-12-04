@@ -1,0 +1,46 @@
+from openpyxl import load_workbook
+wb2 =load_workbook('code.xlsm')
+#print(wb2.get_sheet_names())
+
+sheet1 = wb2['10.按功能分建筑物 ']
+#print(sheet1['B4'].value == None)
+
+row = 3
+col = 2
+
+map = ['A', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+
+def getpos(row, col):
+    return map[col]+str(row)
+
+
+def parse(col):
+
+    global row
+
+    #print('col' ,col , ' ' ,'row' , row)
+
+    tmp = {}
+    pos = getpos(row, col)
+    tmp['name'] = sheet1[pos].value
+    tmp['child'] = []
+
+    row = row+1
+    newpos = getpos(row, col+1)
+
+    if(sheet1[newpos].value == None):
+        return tmp
+    else:
+
+        #newpos = getpos(row, col+1)
+        while(sheet1[newpos].value != None):
+            newpos = getpos(row, col + 1)
+            print(newpos)
+            print(row,col)
+            if sheet1[newpos].value == None:
+                break
+            tmp['child'].append(parse(col+1))
+
+    return tmp
+
+print(parse(2))
