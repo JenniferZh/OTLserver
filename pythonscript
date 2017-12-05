@@ -1,8 +1,10 @@
+import json
 from openpyxl import load_workbook
 wb2 =load_workbook('code.xlsm')
 #print(wb2.get_sheet_names())
 
-sheet1 = wb2['10.按功能分建筑物 ']
+#sheet1 = wb2['10.按功能分建筑物 ']
+#sheet2 = wb2['22.专业领域']
 #print(sheet1['B4'].value == None)
 
 row = 3
@@ -14,16 +16,23 @@ def getpos(row, col):
     return map[col]+str(row)
 
 
-def parse(col):
+def parse(col, sheet1):
 
     global row
 
-    #print('col' ,col , ' ' ,'row' , row)
+    #print(row , 'col', col)
 
     tmp = {}
     pos = getpos(row, col)
     tmp['name'] = sheet1[pos].value
-    tmp['child'] = []
+    codepos = getpos(row, 1)
+    defpos = getpos(row, 8)
+    tmp['code'] = sheet1[codepos].value
+
+    if sheet1[defpos].value != None:
+        tmp['def'] = sheet1[defpos].value
+
+    tmp['children'] = []
 
     row = row+1
     newpos = getpos(row, col+1)
@@ -35,12 +44,46 @@ def parse(col):
         #newpos = getpos(row, col+1)
         while(sheet1[newpos].value != None):
             newpos = getpos(row, col + 1)
-            print(newpos)
-            print(row,col)
+            #print(newpos)
+            #print(row,col)
             if sheet1[newpos].value == None:
                 break
-            tmp['child'].append(parse(col+1))
+            tmp['children'].append(parse(col+1, sheet1))
 
     return tmp
 
-print(parse(2))
+#print(parse(2))
+
+#print(sheet1[getpos(row, 2)].value)
+
+def parseall(sheet1):
+    sheet = {}
+    sheet['name'] = sheet1.title
+    sheet['children'] = []
+    while sheet1[getpos(row, 2)].value != None:
+        sheet['children'].append(parse(2, sheet1))
+    return sheet
+
+def parseallsheet():
+    global row
+    names = wb2.get_sheet_names()
+    for name in names:
+        if(name == '32.工具'):
+            continue
+        sheet = wb2[name]
+        result = parseall(sheet)
+        row = 3
+
+        with open( name+'.json', 'w', encoding="utf-8") as f:
+            json.dump(result, f, ensure_ascii=False)
+        #print(result)
+
+
+#sheet = wb2['32.工具']
+#print(parse(2, sheet))
+#print(parse(2, sheet))
+
+#parseallsheet()
+#print(sheet1.title)
+sheet = wb2['60.地理信息']
+print(parse(2, sheet))
