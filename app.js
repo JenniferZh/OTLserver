@@ -12,6 +12,7 @@ var contexts = require('./routes/contexts');
 var search = require('./routes/search');
 var mvd = require('./routes/mvds');
 var template = require('./routes/templates');
+var classcode = require('./routes/classes');
 
 var app = express();
 
@@ -43,6 +44,7 @@ app.use('/catalog/ifc',contexts);
 app.use('/search', search);
 app.use('/mvd', mvd);
 app.use('/template', template);
+app.use('/classcode', classcode);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

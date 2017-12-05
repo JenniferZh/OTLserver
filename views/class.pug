@@ -1,0 +1,21 @@
+extends layout
+
+block content
+    script window.classgraph = !{JSON.stringify(curclass)}
+    script(src='https://d3js.org/d3.v4.min.js')
+    div(class='container-fluid')
+        div(class='row')
+            nav(class='col-md-3 col-sm-4 bg-faded sidebar')
+
+                ul(class='nav nav-pills flex-column')
+
+                    each val in namelist
+                        li(class='nav-item', id="child")
+                            a(class='nav-link', href='/classcode/'+val.name) #{val.name}
+
+            div(class='col-md-9 ml-sm-auto col-sm-8 pt-3')
+                h2(class="item-header") #{curclass.name}
+                div(id='class-graph', role='tabpanel', aria-labelledby='nav-graph-tab')
+                    script(src='/javascripts/classgraph.js')
+
+

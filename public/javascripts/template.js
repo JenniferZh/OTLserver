@@ -96,9 +96,6 @@ var i = 0,
 var tree = d3.layout.tree()
     .size([height, width]);
 
-var tree2 = d3.layout.tree()
-    .size([height, width]);
-
 var diagonal = d3.svg.diagonal()
     .projection(function(d) { return [d.y, d.x]; });
 
@@ -124,36 +121,37 @@ root2 = targetref;
 root2.x0 = height / 2;
 root2.y0 = 0;
 
-var test1 = {
-    root: root,
-    svg: svg
+
+test1 = {
+    root : root,
+    svg : svg
 };
 
-var test2 = {
-    root: root2,
-    svg: svg2
+test2 = {
+    root : root2,
+    svg : svg2
 };
 
-//update.apply(test1, root);
-//update.apply(test2, root2);
-update(root, svg, root);
-update(root2, svg2, root2);
+
+update.call(test1, root);
+update.call(test2, root2);
 
 
 
 //d3.select(self.frameElement).style("height", "500px");
 
-function update(source, svg, root) {
+function update(source) {
+    console.log(update.caller);
 
     // Compute the new tree layout.
-    var nodes = tree.nodes(source).reverse(),
+    var nodes = tree.nodes(this.root).reverse(),
         links = tree.links(nodes);
 
     // Normalize for fixed-depth.
     nodes.forEach(function(d) { d.y = d.depth * 140; });
 
     // Update the nodes…
-    var node = svg.selectAll("g.node")
+    var node = this.svg.selectAll("g.node")
         .data(nodes, function(d) { return d.id || (d.id = ++i); });
 
     // Enter any new nodes at the parent's previous position.
@@ -207,7 +205,7 @@ function update(source, svg, root) {
         .style("fill-opacity", 1e-6);
 
     // Update the links…
-    var link = svg.selectAll("path.link")
+    var link = this.svg.selectAll("path.link")
         .data(links, function(d) { return d.target.id; });
 
     // Enter any new links at the parent's previous position.
@@ -248,5 +246,6 @@ function click(d) {
         d.children = d._children;
         d._children = null;
     }
+    //console.log(this);
     update(d);
 }

@@ -129,6 +129,7 @@ text {
 }
 
 .node text {
+    color: black;
     font: 12px sans-serif;
 }
 
@@ -155,4 +156,12 @@ text {
     border: 0px;
     border-radius: 8px;
     pointer-events: none;
+}
+
+.node rect {
+    cursor: pointer;
+    fill: #fff;
+    fill-opacity: 0.5;
+    stroke: #3182bd;
+    stroke-width: 1.5px;
 }
