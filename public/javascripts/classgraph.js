@@ -1,3 +1,10 @@
+var selector = '.nav li';
+
+$(selector).on('click', function(){
+    $(selector).removeClass('active');
+    $(this).addClass('active');
+});
+
 var margin = {top: 30, right: 20, bottom: 30, left: 20},
     width = 960,
     barHeight = 20,
@@ -12,7 +19,7 @@ var diagonal = d3.linkHorizontal()
     .y(function(d) { return d.x; });
 
 var svg = d3.select("#class-graph").append("svg")
-    .attr("width", width) // + margin.left + margin.right)
+    .attr("width", width)
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -21,6 +28,9 @@ root.x0 = 0;
 root.y0 = 0;
 update(root);
 
+var div = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
 
 function update(source) {
 
@@ -59,7 +69,22 @@ function update(source) {
         .attr("height", barHeight)
         .attr("width", barWidth)
         .style("fill", color)
-        .on("click", click);
+        .on("click", click)
+        .on("mouseover", function(d) {
+            if(d.data.def !== undefined) {
+                div.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+                div.html(d.data.def)
+                    .style("left", (d3.event.pageX) + "px")
+                    .style("top", (d3.event.pageY - 28) + "px");
+            }
+        })
+        .on("mouseout", function(d) {
+            div.transition()
+                .duration(500)
+                .style("opacity", 0);
+        });
 
     nodeEnter.append("text")
         .attr("dy", 3.5)

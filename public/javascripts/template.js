@@ -67,18 +67,18 @@ all.children = child;
  * view的数据准备
  * @type {{top: number, right: number, bottom: number, left: number}}
  */
-var viewroot = viewlist[0].roots[0];
-
-var viewref = viewroot.applicability.ref;
-
-var targetref = null;
-
-for(var i = 0; i < conceptTemplates.length; i++) {
-    if(conceptTemplates[i].uuid == viewref)
-        targetref = conceptTemplates[i];
-}
-
-targetref.name = viewroot.applicableRootEntity;
+// var viewroot = viewlist[0].roots[0];
+//
+// var viewref = viewroot.applicability.ref;
+//
+// var targetref = null;
+//
+// for(var i = 0; i < conceptTemplates.length; i++) {
+//     if(conceptTemplates[i].uuid == viewref)
+//         targetref = conceptTemplates[i];
+// }
+//
+// targetref.name = viewroot.applicableRootEntity;
 
 
 
@@ -117,9 +117,9 @@ root = all;
 root.x0 = height / 2;
 root.y0 = 0;
 
-root2 = targetref;
-root2.x0 = height / 2;
-root2.y0 = 0;
+// root2 = targetref;
+// root2.x0 = height / 2;
+// root2.y0 = 0;
 
 
 test1 = {
@@ -127,21 +127,20 @@ test1 = {
     svg : svg
 };
 
-test2 = {
-    root : root2,
-    svg : svg2
-};
+// test2 = {
+//     root : root2,
+//     svg : svg2
+// };
 
 
 update.call(test1, root);
-update.call(test2, root2);
+//update.call(test2, root2);
 
 
 
 //d3.select(self.frameElement).style("height", "500px");
 
 function update(source) {
-    console.log(update.caller);
 
     // Compute the new tree layout.
     var nodes = tree.nodes(this.root).reverse(),
@@ -158,7 +157,7 @@ function update(source) {
     var nodeEnter = node.enter().append("g")
         .attr("class", "node")
         .attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
-        .on("click", click);
+//        .on("click", click);
 
     nodeEnter.append("circle")
         .attr("r", 1e-6)
@@ -195,7 +194,7 @@ function update(source) {
     // Transition exiting nodes to the parent's new position.
     var nodeExit = node.exit().transition()
         .duration(duration)
-        .attr("transform", function(d) { return "translate(" + source.y + "," + source.x + ")"; })
+//        .attr("transform", function(d) { return "translate(" + source.y + "," + source.x + ")"; })
         .remove();
 
     nodeExit.select("circle")
@@ -246,6 +245,5 @@ function click(d) {
         d.children = d._children;
         d._children = null;
     }
-    //console.log(this);
     update(d);
 }

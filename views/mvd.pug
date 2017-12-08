@@ -57,8 +57,46 @@ block content
                             td #{viewlist[0].applicableSchma}
                         tr
                             td(width='20%', class='text-center') 内容描述
-                            td #{viewlist[0].def[0].content}
+                            if viewlist[0].def !== undefined
+                                td #{viewlist[0].def[0].content}
                     hr
-                    div(id='view-graph')
-                        script(src='/javascripts/template.js')
+
+                    div(id = 'accordion' role = 'tablist')
+                        - for (var x = 0; x < viewlist[0].roots.length; x++)
+                            div(class = 'card')
+                                div(class = 'card-header' role='tab' id='head'+x)
+                                    h5(class='mb-0')
+                                        a(data-toggle='collapse' href='#collapse'+x aria-expanded='true' aria-controls='collapse'+x) ModelView #{viewlist[0].roots[x].name}
+                                div(id='collapse'+x class='collapse show' role='tabpanel' aria-labelledby='head'+x data-parent='#accordion')
+                                    div(class='card-body')
+                                        p(class='alert alert-primary') 基本信息
+                                        table(width="100%",class='namevalue')
+                                            tr
+                                                td(width="20%", class='text-center') 名称
+                                                td #{viewlist[0].roots[x].name}
+                                            tr
+                                                td(width="20%", class='text-center') UUID
+                                                td #{viewlist[0].roots[x].uuid}
+                                            tr
+                                                td(width='20%', class='text-center') 适用实体
+                                                td #{viewlist[0].roots[x].applicableRootEntity}
+                                            tr
+                                                td(width='20%', class='text-center') 内容描述
+                                                if viewlist[0].roots[x].def !== undefined
+                                                    td #{viewlist[0].roots[x].def[0].content}
+
+                                        p(class='alert alert-primary') 适用条件
+                                        if viewlist[0].roots[x].applicability
+                                            div(id='app'+x)
+                                        else
+                                            p 无
+
+                                        - for( var p = 0; p < viewlist[0].roots[x].concepts.length; p++)
+                                            div(id='a'+viewlist[0].roots[x].concepts[p].uuid)
+                                                p(class='alert alert-warning') #{viewlist[0].roots[x].concepts[p].name}
+
+
+                    script(src='/javascripts/template.js')
+                    script(src='/javascripts/modelview.js')
+
 

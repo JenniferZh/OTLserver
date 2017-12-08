@@ -72,6 +72,10 @@ a {
   border-radius: 0;
 }
 
+.sidebar .nav-link.active {
+    background-color: #563d7c;
+}
+
 /**
 目录中的子类向前缩进
  */
