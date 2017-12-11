@@ -1,6 +1,6 @@
 var margin = {top: 20, right: 120, bottom: 20, left: 120},
-    width = 1000 - margin.right - margin.left,
-    height = 400 - margin.top - margin.bottom;
+    width = 1400 - margin.right - margin.left,
+    height = 600 - margin.top - margin.bottom;
 
 
 
@@ -14,7 +14,74 @@ var tree = d3.layout.tree()
 var target = viewlist[0].roots;
 
 for(var i = 0; i < target.length; i++) {
-    console.log(target[i].concepts);
+
+
+    if(target[i].applicability !== undefined) {
+
+
+
+
+        var viewref = target[i].applicability.ref;
+
+        var targetref = null;
+
+        for(var j = 0; j < conceptTemplates.length; j++) {
+            if(conceptTemplates[j].uuid == viewref)
+                targetref = conceptTemplates[j];
+        }
+        //
+        targetref.name = target[i].applicableRootEntity;
+        var id = '#app'+target[i].uuid+'1';
+
+        var asvg = d3.select(id).append("svg")
+            .attr("width", width + margin.right + margin.left)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        svgs.push(asvg);
+        roots.push(targetref);
+
+        var test = {
+            svg: asvg,
+            root: targetref
+        };
+
+        tests.push(test);
+
+
+
+
+
+
+
+        var id = '#app'+target[i].uuid+'2';
+        console.log(id);
+        var asvg = d3.select(id).append("svg")
+            .attr("width", width + margin.right + margin.left)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        var aroot = target[i].applicability.rules;
+
+        aroot.x0 = height/2;
+        aroot.y0 = 0;
+
+        svgs.push(asvg);
+        roots.push(aroot);
+
+        var test = {
+            svg: asvg,
+            root: aroot
+        };
+
+        tests.push(test);
+
+
+    }
+
+
+
     for(var j = 0; j < target[i].concepts.length; j++) {
         //console.log(i);
         var singleconcept = target[i].concepts[j];
@@ -47,6 +114,8 @@ for(var i = 0; i < target.length; i++) {
 
     }
 }
+
+
 
 // console.log(svgs);
 // console.log(roots);

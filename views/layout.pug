@@ -3,9 +3,9 @@ html(lang='cn-zh')
   head
     title BIM
     link(href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css", rel="stylesheet", integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb", crossorigin="anonymous")
-    script(src='https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js')
-    script(src='https://cdn.bootcss.com/popper.js/1.12.5/umd/popper.js')
-    script(src='https://cdn.bootcss.com/bootstrap/4.0.0-beta/js/bootstrap.js')
+    script(src="https://code.jquery.com/jquery-3.2.1.slim.min.js", integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN", crossorigin="anonymous")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js", integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh", crossorigin="anonymous")
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js', integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ", crossorigin="anonymous")
     script(src='https://d3js.org/d3.v3.min.js')
 
 
@@ -26,12 +26,14 @@ html(lang='cn-zh')
           li(class='nav-item active')
             a(class="nav-link" href="/") 主页
               span(class='sr-only')(current)
-          li(class='nav-item' href="#")
+          li(class='nav-item')
             a(class="nav-link" href="/catalog/ifc/IfcRoot") 构件库
-          li(class='nav-item' href="#")
+          li(class='nav-item')
             a(class="nav-link" href="/mvd") MVD
-          li(class='nav-item' href="#")
+          li(class='nav-item')
             a(class="nav-link" href="/classcode/10.按功能分建筑物") 分类编码
-          li(class='nav-item' href="#")
+          li(class='nav-item')
             a(class="nav-link" href="#") 功能
+      script(src='/javascripts/application.js')
+
     block content

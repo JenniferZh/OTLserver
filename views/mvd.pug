@@ -87,7 +87,8 @@ block content
 
                                         p(class='alert alert-primary') 适用条件
                                         if viewlist[0].roots[x].applicability
-                                            div(id='app'+x)
+                                            div(id='app'+viewlist[0].roots[x].uuid+'1')
+                                            div(id='app'+viewlist[0].roots[x].uuid+'2')
                                         else
                                             p 无
 
