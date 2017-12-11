@@ -90,11 +90,11 @@ block content
                                             div(id='app'+viewlist[0].roots[x].uuid+'1')
                                             div(id='app'+viewlist[0].roots[x].uuid+'2')
                                         else
-                                            p 无
+                                            p &nbsp;&nbsp;&nbsp;&nbsp;无适用条件
 
                                         - for( var p = 0; p < viewlist[0].roots[x].concepts.length; p++)
                                             div(id='a'+viewlist[0].roots[x].concepts[p].uuid)
-                                                p(class='alert alert-warning') #{viewlist[0].roots[x].concepts[p].name}
+                                                p(class='alert alert-warning') 规则#{p+1}-#{viewlist[0].roots[x].concepts[p].name}
 
 
                     script(src='/javascripts/template.js')
