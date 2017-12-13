@@ -14,7 +14,7 @@ a {
 右边导航链接背景色
  */
 .nav-pills .nav-link.active {
-    background-color: #563d7c;
+    background-color: #1f262d;
 }
 
 /**
@@ -22,7 +22,7 @@ a {
  */
 .nav-custom {
   min-height: 4rem;
-  background-color: #563d7c
+  background-color: #1f262d
 
 }
 
