@@ -27,6 +27,13 @@ a {
 }
 
 /**
+导航条下拉菜单位置，颜色等
+ */
+.dropdown-menu {
+    margin:.75rem 0 0;
+}
+
+/**
 导航条的字体颜色
  */
 .navbar-light .navbar-brand {
@@ -169,3 +176,4 @@ text {
     stroke: #3182bd;
     stroke-width: 1.5px;
 }
+

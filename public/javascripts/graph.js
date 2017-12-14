@@ -31,8 +31,8 @@ nodes[cur.name].group = 3;
 
 var color = d3.scale.category10();
 
-var width = 960,
-    height = 500;
+var width = 1060,
+    height = 600;
 
 var force = d3.layout.force()
     .nodes(d3.values(nodes))

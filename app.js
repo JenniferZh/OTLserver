@@ -13,6 +13,7 @@ var search = require('./routes/search');
 var mvd = require('./routes/mvds');
 var template = require('./routes/templates');
 var classcode = require('./routes/classes');
+var classitem = require('./routes/classitems');
 
 var app = express();
 
@@ -45,6 +46,7 @@ app.use('/search', search);
 app.use('/mvd', mvd);
 app.use('/template', template);
 app.use('/classcode', classcode);
+app.use('/classitem', classitem);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
