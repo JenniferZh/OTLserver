@@ -62,7 +62,7 @@ var node = svg.selectAll(".node")
 
 node.append("circle")
     .attr("r", 8)
-    .style("fill", function(d) { console.log('d: ', d); return color(d.group); });
+    .style("fill", function(d) { return color(d.group); });
 
 node.append("text")
     .attr("x", 12)

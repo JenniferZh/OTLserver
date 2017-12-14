@@ -1,5 +1,6 @@
-$(".nav a").on("click", function(){
-    console.log('here');
-    $(".nav").find(".active").removeClass("active");
-    $(this).parent().addClass("active");
+
+
+$(document).ready(function() {
+    $('li.active').removeClass('active');
+    $('a[href="' + location.pathname + '"]').closest('li').addClass('active');
 });
