@@ -40,7 +40,7 @@ app.use(express.static('public'));
 
 
 app.use('/', index);
-app.use('/api/v1.0/IFC', items);
+app.use('/api/v1.0', items);
 app.use('/catalog/ifc',contexts);
 app.use('/search', search);
 app.use('/mvd', mvd);
