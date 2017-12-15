@@ -32,9 +32,12 @@ html(lang='cn-zh')
               a(class='dropdown-item' href='/catalog/ifc/IfcRoot') IFC4+Rail
           li(class='nav-item dropdown')
             a(class="nav-link dropdown-toggle",href='#',id='navbarDropdown2', role='button', data-toggle='dropdown', aria-haspopup='true',aria-expanded='false') 分类编码
-            div(class='dropdown-menu' aria-labelledby='navbarDropdown')
-                a(class='dropdown-item' href='/classcode/按功能分建筑物') 铁路分类编码概览
-                a(class='dropdown-item' href='/classitem/铁路领域分类编码') 铁路分类编码详细
+            ul(class='dropdown-menu' aria-labelledby='navbarDropdown')
+                li(class='dropdown-submenu')
+                    a(class='dropdown-item dropdown-toggle',data-toggle="dropdown" ,href="#") 铁路分类编码
+                    ul(class='dropdown-menu')
+                        a(class='dropdown-item' href='/classcode/按功能分建筑物') 铁路分类编码概览
+                        a(class='dropdown-item' href='/classitem/铁路领域分类编码') 铁路分类编码详细
           li(class='nav-item')
             a(class="nav-link" href="/mvd") 交付标准
           li(class='nav-item')
