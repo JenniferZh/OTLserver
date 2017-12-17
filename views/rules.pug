@@ -1,0 +1,42 @@
+extends layout
+
+block content
+
+    div(class='container-fluid')
+        div(class='row')
+            nav(class='col-md-3 col-sm-4 bg-faded sidebar')
+
+                ul(class='nav nav-pills flex-column')
+
+                    each val in rules
+                        li(class='nav-item', id="child")
+                            a(class='nav-link', href='/rules/road/' + val.id) #{val.id}
+
+            div(class='col-md-9 ml-sm-auto col-sm-8 pt-3')
+                h2(class="item-header") #{currule.source} #{currule.id}
+                table(width="100%",class='namevalue my-5')
+                    tr
+                        td(width="20%", class='text-center') 条款来源
+                        td #{currule.source}
+                    tr
+                        td(width="20%", class='text-center') 条款条目
+                        td #{currule.id}
+                    tr
+                        td(width='20%', class='text-center') URL
+                        td http://cbims.org.cn#{currule.url}
+
+                    tr
+                        td(width='20%', class='text-center') 条款内容
+                        td #{currule.content}
+                    tr
+                        td(width='20%', class='text-center') SNL
+                        td
+                            each sequence in currule.SNL
+                                each word in sequence
+                                    if(word.type === 1)
+                                        span(class='badge badge-info', id='alink') #{word.name}
+                                    if(word.type === 2)
+                                        a(class='badge badge-primary', href=word.ref, id='alink') #{word.name}
+                                    if(word.type === 3)
+                                        span(class='badge badge-danger', id='alink') #{word.name}
+                                br

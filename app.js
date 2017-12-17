@@ -15,6 +15,7 @@ var template = require('./routes/templates');
 var classcode = require('./routes/classes');
 var classitem = require('./routes/classitems');
 var api = require('./routes/api');
+var rules = require('./routes/rules');
 
 var app = express();
 
@@ -49,6 +50,7 @@ app.use('/template', template);
 app.use('/classcode', classcode);
 app.use('/classitem', classitem);
 app.use('/apidoc', api);
+app.use('/rules/road', rules);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
