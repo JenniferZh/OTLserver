@@ -1,0 +1,36 @@
+extends layout
+
+block content
+
+    div(class='row')
+        div(class='col-md-8 offset-md-2 my-3')
+            h1 RESTful API 说明文档
+            div(class='bs-callout bs-callout-info')
+                h4 获取IFC数据模型信息
+                p
+                  strong URL：
+                  | /api/v1.0/IFC/:IFC_name
+                p
+                  strong 方法：
+                  | GET
+                p
+                  strong 参数说明：
+                  | IFC_name即为需要获得的IFC实体名称，例如：IfcWindow
+                p
+                  strong 返回数据说明：
+                  |  name是实体名称；supertype是实体的父类；subtypes是实体的所有直接子类；attribute是实体所有直接属性
+
+            div(class='bs-callout bs-callout-info')
+                h4 获取分类编码信息
+                p
+                    strong URL：
+                    | /api/v1.0/classcode/:classcode_name
+                p
+                    strong 方法：
+                    | GET
+                p
+                    strong 参数说明：
+                    | classcode_name即为需要获得的分类编码条目的名称，例如：客运站
+                p
+                    strong 返回数据说明：
+                    |  name是条目名称；supertype是条目的父条目；subtypes是条目的所有直接子条目；code是其对应的分类编码；def是条目备注（如不存在，返回“undefined”）

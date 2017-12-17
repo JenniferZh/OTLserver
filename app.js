@@ -14,6 +14,7 @@ var mvd = require('./routes/mvds');
 var template = require('./routes/templates');
 var classcode = require('./routes/classes');
 var classitem = require('./routes/classitems');
+var api = require('./routes/api');
 
 var app = express();
 
@@ -47,6 +48,7 @@ app.use('/mvd', mvd);
 app.use('/template', template);
 app.use('/classcode', classcode);
 app.use('/classitem', classitem);
+app.use('/apidoc', api);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
