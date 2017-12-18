@@ -6,8 +6,10 @@ block content
         div(class='row')
             nav(class='col-md-3 col-sm-4 bg-faded sidebar')
 
-                ul(class='nav nav-pills flex-column')
 
+                ul(class='nav nav-pills flex-column')
+                    li(class='nav-item')
+                        a(class='nav-link', href='#') 公路交通安全设施设计规范
                     each val in rules
                         li(class='nav-item', id="child")
                             a(class='nav-link', href='/rules/road/' + val.id) #{val.id}

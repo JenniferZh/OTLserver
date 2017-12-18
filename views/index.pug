@@ -5,7 +5,8 @@ block content
     div(class='jumbotron')
       div(class='container')
         h1(class='display-3' style="font-weight:100") CBIMS知识库
-        p 建筑信息模型涵盖了几何学、空间关系、地理信息系统、各种建筑组件的性质及数量（例如供应商的详细信息）。建筑信息模型可以用来展示整个建筑生命周期，包括了兴建过程及营运过程。提取建筑内材料的信息十分方便。建筑内各个部分、各个系统都可以呈现出来。建筑信息模型用数字化的建筑组件表示真实世界中用来建造建筑物的构件。对于传统电脑辅助设计用向量图形构图来表示物体的设计方法来说是个基本的改变，因为它能够结合众多图则来展示对象。
+        p CBIMS知识库是支撑各项工程领域标准化应用的工具。通过知识库中的概念、属性、关系、规则，可以规范化建立模型、分析模型、检查建模，从而保证模型的可信性。
+        p CBIMS知识库是国家层面、面向多工程领域的知识库，CBIMS知识库的建立，主要基于《面向工程领域的共享信息模型》系列国家标准。
 
     div(class='container')
       div(class='row')
@@ -13,23 +14,31 @@ block content
           form(class = 'input-group' action='/search/haha' method='post')
             input(type = 'text' class='form-control' placeholder='输入名称' aria-label='搜索构件' id='otlname' name='name_field')
             span(class='input-group-btn')
-              button(class='btn btn-info' type='submit') 搜索构件
+              button(class='btn btn-info' type='submit') 搜索内容
       div(class='row pt-5')
-        div(class='col-md-4')
+        div(class='col-md-3')
           h2 数据模型
-          p 通过对BuildingSMART发布的IFC Schema解析，展示IFC4的实体信息。具体包括，继承关系、属性信息以及它们的可视化关系。
+          p 数据模型是各个工程领域的开源数据标准，是软件所应共同实现、解析、导出的部分。
+          br
           p
             a(class='btn btn-primary' href='/catalog/ifc/IfcRoot' role='button') 查看详细
-        div(class='col-md-4')
+        div(class='col-md-3')
           h2 交付标准
-          p 通过解析mvdxml文件，展示一个MVD文件的基本信息，如名称、描述、ID和其定义的对于IFC文件的要求规则。
+          p 交付标准是指对特定交换场景下，对信息模型内容、取值的要求以及限定，交付标准引用数据模型与分类编码。
           p
             a(class='btn btn-primary' href='/mvd' role='button') 查看详细
-        div(class='col-md-4')
+        div(class='col-md-3')
           h2 分类编码
-          p 对铁路领域相关的分类编码表进行解析，使用可展开的树状图来展示铁路领域的实体的分类结构。
+          p 对各个领域相关的数据字典，包括概念、属性、关系，以及各个工程领域的信息分类编码与规范术语的互相映射。
           p
             a(class='btn btn-primary' href='/classcode/按功能分建筑物' role='button') 查看详细
+        div(class='col-md-3')
+          h2 业务规范
+          p 业务规范是各个工程领域中，针对特定业务对信息模型的约束。
+          br
+          br
+          p
+            a(class='btn btn-primary' href='/rules/road/3.0.1' role='button') 查看详细
       hr
   footer(class="container")
     p(class='text-center') THU BIM CHECKER GROUP 2017

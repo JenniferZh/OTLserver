@@ -29,7 +29,7 @@ html(lang='cn-zh')
           li(class='nav-item dropdown')
             a(class="nav-link dropdown-toggle",href='#',id='navbarDropdown', role='button', data-toggle='dropdown', aria-haspopup='true',aria-expanded='false') 数据模型
             div(class='dropdown-menu' aria-labelledby='navbarDropdown')
-              a(class='dropdown-item' href='/catalog/ifc/IfcRoot') IFC4+Rail
+              a(class='dropdown-item' href='/catalog/ifc/IfcRoot') 铁路工程数据模型
           li(class='nav-item dropdown')
             a(class="nav-link dropdown-toggle",href='#',id='navbarDropdown2', role='button', data-toggle='dropdown', aria-haspopup='true',aria-expanded='false') 分类编码
             ul(class='dropdown-menu' aria-labelledby='navbarDropdown')
@@ -40,8 +40,10 @@ html(lang='cn-zh')
                         a(class='dropdown-item' href='/classitem/铁路领域分类编码') 铁路分类编码详细
           li(class='nav-item')
             a(class="nav-link" href="/mvd") 交付标准
-          li(class='nav-item')
-            a(class="nav-link" href="/rules/road/3.0.1") 业务规范
+          li(class='nav-item dropdown')
+            a(class="nav-link dropdown-toggle",href='#',id='navbarDropdown3', role='button', data-toggle='dropdown', aria-haspopup='true',aria-expanded='false') 业务规范
+            div(class='dropdown-menu' aria-labelledby='navbarDropdown')
+              a(class='dropdown-item' href='/rules/road/3.0.1') 公路交通安全设施设计规范
           li(class='nav-item')
             a(class='nav-link' href='/apidoc') API
       script(src='/javascripts/application.js')
