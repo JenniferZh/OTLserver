@@ -12,15 +12,18 @@ block content
 
                     li(class='nav-item')
                         if parent_item !== null
-                            a(class='nav-link', href=parent_item.url) #{parent_item.name}
+                            - tmp = parent_item.name.replace(/[0-9]/g, '')
+                            a(class='nav-link', href=parent_item.url) #{tmp}
                     li(class='nav-item')
                         a(class='nav-link active', href=curitem.url)
+                            - tmp = curitem.name.replace(/[0-9]/g, '')
                             img(src="https://cdn.bootcss.com/open-iconic/1.1.1/png/chevron-right.png" alt='chevron-right')
-                            | #{curitem.name}
+                            | #{tmp}
 
                     each val in child_item
+                        - tmp = val.name.replace(/[0-9]/g, '')
                         li(class='nav-item', id="child")
-                            a(class='nav-link', href=val.url) #{val.name}
+                            a(class='nav-link', href=val.url) #{tmp}
 
             div(class='col-md-9 ml-sm-auto col-sm-8 pt-3')
                 h2(class="item-header") #{curitem.name}
@@ -40,12 +43,14 @@ block content
                                 td(width='20%', class='text-center') 父类
                                 td
                                     each val in parent_list
-                                        a(href=val.url, class='badge badge-primary', id='alink') #{val.name}
+                                        - tmp = val.name.replace(/[0-9]/g, '')
+                                        a(href=val.url, class='badge badge-primary', id='alink') #{tmp}
                             tr
                                 td(width='20%', class='text-center') 子类
                                 td
                                     each val in child_item
-                                        a(href=val.url, class='badge badge-info', id='alink') #{val.name}
+                                        - tmp = val.name.replace(/[0-9]/g, '')
+                                        a(href=val.url, class='badge badge-info', id='alink') #{tmp}
                             tr
                                 td(width='20%', class='text-center') 分类编码
                                 td #{curitem.code}

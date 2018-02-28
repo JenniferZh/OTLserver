@@ -83,6 +83,11 @@ a {
     background-color:#1f262dc4;
 }
 
+.sidebar li > a:hover {
+    background-color: #cccccc;
+    color: dimgrey;
+}
+
 /**
 目录中的子类向前缩进
  */

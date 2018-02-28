@@ -6,14 +6,14 @@ links.push({source: parent, target:cur.name, group:1});
 
 var child_list = cur.childs;
 for(var i = 0; i < child_list.length; i++) {
-    links.push({source: cur.name, target: child_list[i], group:2});
+    links.push({source: cur.name.replace(/[0-9]/g, ''), target: child_list[i].replace(/[0-9]/g, ''), group:2});
 }
 
 for(var i = 0; i < child.length; i++) {
     this_item = child[i];
     this_item_child = this_item.childs;
     for(var j = 0; j < this_item_child.length; j++) {
-        links.push({source: this_item.name, target: this_item_child[j], group:2});
+        links.push({source: this_item.name.replace(/[0-9]/g, ''), target: this_item_child[j].replace(/[0-9]/g, ''), group:2});
     }
 }
 

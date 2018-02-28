@@ -14,6 +14,7 @@ var mvd = require('./routes/mvds');
 var template = require('./routes/templates');
 var classcode = require('./routes/classes');
 var classitem = require('./routes/classitems');
+var roadclassitem = require('./routes/roadclassitem');
 var api = require('./routes/api');
 var rules = require('./routes/rules');
 
@@ -49,6 +50,7 @@ app.use('/mvd', mvd);
 app.use('/template', template);
 app.use('/classcode', classcode);
 app.use('/classitem', classitem);
+app.use('/roadclassitem', roadclassitem);
 app.use('/apidoc', api);
 app.use('/rules/road', rules);
 
