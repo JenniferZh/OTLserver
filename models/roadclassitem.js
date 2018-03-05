@@ -19,7 +19,7 @@ var RoadClassItemSchema = Schema(
 RoadClassItemSchema
     .virtual('url')
     .get(function () {
-        return '/roadclassitem/' + this.name;
+        return '/cccc/' + this.name;
     });
 
 //Export model

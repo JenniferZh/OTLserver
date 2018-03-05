@@ -49,8 +49,8 @@ app.use('/search', search);
 app.use('/mvd', mvd);
 app.use('/template', template);
 app.use('/classcode', classcode);
-app.use('/classitem', classitem);
-app.use('/roadclassitem', roadclassitem);
+app.use('/crbim', classitem);
+app.use('/cccc', roadclassitem);
 app.use('/apidoc', api);
 app.use('/rules/road', rules);
 

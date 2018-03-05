@@ -19,7 +19,7 @@ var ClassItemSchema = Schema(
 ClassItemSchema
     .virtual('url')
     .get(function () {
-        return '/classitem/' + this.name;
+        return '/crbim/' + this.name;
     });
 
 //Export model
