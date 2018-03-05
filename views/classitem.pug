@@ -26,7 +26,7 @@ block content
                             a(class='nav-link', href=val.url) #{tmp}
 
             div(class='col-md-9 ml-sm-auto col-sm-8 pt-3')
-                h2(class="item-header") #{curitem.name}
+                h2(class="item-header") #{curitem.name.replace(/[0-9]/g, '')}
                 nav(class='nav nav-tabs pt-3', id='mytab', role='tablist')
                     a(class='nav-item nav-link active', id='nav-info-tab', data-toggle="tab", href='#nav-info', role='tab', aria-controls='nav-info', aria-selected='true') 基本信息
                     a(class='nav-item nav-link', id='nav-graph-tab', data-toggle="tab", href='#nav-graph', role='tab', aria-controls='nav-info', aria-selected='true') 图形显示
@@ -55,6 +55,12 @@ block content
                             tr
                                 td(width='20%', class='text-center') 分类编码
                                 td #{curitem.code}
+                            tr
+                                td(width='20%', class='text-center') 等价类
+                                td
+                                    each val in curitem.equalclass
+                                        - tmp = val.split('/'); var domain = '公路'; if(tmp[1] === 'classitem') domain = '铁路';
+                                        a(href=val, class='badge badge-info', id='alink') #{domain}-#{tmp[2].replace(/[0-9]/g, '')}
                             tr
                                 td(width='20%', class='text-center') 备注
                                 if curitem.def !== 'undefined'

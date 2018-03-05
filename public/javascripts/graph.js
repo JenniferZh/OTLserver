@@ -2,7 +2,7 @@ var links = [];
 
 //add cur and it parent
 var parent = cur.parent;
-links.push({source: parent, target:cur.name, group:1});
+links.push({source: parent.replace(/[0-9]/g, ''), target:cur.name.replace(/[0-9]/g, ''), group:1});
 
 var child_list = cur.childs;
 for(var i = 0; i < child_list.length; i++) {
@@ -12,17 +12,18 @@ for(var i = 0; i < child_list.length; i++) {
 var equal_list = cur.equalclass;
 if(equal_list !== undefined) {
     for (var i = 0; i < equal_list.length; i++) {
+        //var equal_name = equal_list[i].split("/")[2];
         links.push({source: cur.name.replace(/[0-9]/g, ''), target: equal_list[i].replace(/[0-9]/g, ''), group: 4});
     }
 }
 
-for(var i = 0; i < child.length; i++) {
-    this_item = child[i];
-    this_item_child = this_item.childs;
-    for(var j = 0; j < this_item_child.length; j++) {
-        links.push({source: this_item.name.replace(/[0-9]/g, ''), target: this_item_child[j].replace(/[0-9]/g, ''), group:2});
-    }
-}
+// for(var i = 0; i < child.length; i++) {
+//     this_item = child[i];
+//     this_item_child = this_item.childs;
+//     for(var j = 0; j < this_item_child.length; j++) {
+//         links.push({source: this_item.name.replace(/[0-9]/g, ''), target: this_item_child[j].replace(/[0-9]/g, ''), group:2});
+//     }
+// }
 
 
 var nodes = {};
@@ -33,7 +34,7 @@ links.forEach(function(link) {
     link.target = nodes[link.target] || (nodes[link.target] = {name: link.target, group: link.group});
 });
 
-nodes[cur.name].group = 3;
+nodes[cur.name.replace(/[0-9]/g, '')].group = 3;
 
 
 var color = d3.scale.category10();

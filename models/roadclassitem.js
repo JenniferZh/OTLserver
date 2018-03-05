@@ -10,7 +10,8 @@ var RoadClassItemSchema = Schema(
         parent: {type:String},
         def:{type:String},
         code:{type:String},
-        parent_list:{type:[String]}
+        parent_list:{type:[String]},
+        equalclass:{type:[String]}
     }
 );
 
