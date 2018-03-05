@@ -10,8 +10,10 @@ for(var i = 0; i < child_list.length; i++) {
 }
 
 var equal_list = cur.equalclass;
-for(var i = 0; i < equal_list.length; i++) {
-    links.push({source: cur.name.replace(/[0-9]/g, ''), target: equal_list[i].replace(/[0-9]/g, ''), group:4});
+if(equal_list !== undefined) {
+    for (var i = 0; i < equal_list.length; i++) {
+        links.push({source: cur.name.replace(/[0-9]/g, ''), target: equal_list[i].replace(/[0-9]/g, ''), group: 4});
+    }
 }
 
 for(var i = 0; i < child.length; i++) {

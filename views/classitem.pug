@@ -35,7 +35,8 @@ block content
                         table(width="100%",class='namevalue')
                             tr
                                 td(width="20%", class='text-center') 名称
-                                td #{curitem.name}
+                                - tmp = curitem.name.replace(/[0-9]/g, '')
+                                td #{tmp}
                             tr
                                 td(width='20%', class='text-center') URL
                                 td http://cbims.org.cn#{curitem.url}
