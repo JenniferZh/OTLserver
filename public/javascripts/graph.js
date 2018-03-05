@@ -13,7 +13,12 @@ var equal_list = cur.equalclass;
 if(equal_list !== undefined) {
     for (var i = 0; i < equal_list.length; i++) {
         //var equal_name = equal_list[i].split("/")[2];
-        links.push({source: cur.name.replace(/[0-9]/g, ''), target: equal_list[i].replace(/[0-9]/g, ''), group: 4});
+        var equal_name = equal_list[i].replace(/[0-9]/g, '');
+        equal_name_list = equal_name.split('/');
+        equal_name = equal_name_list[1] + ':' + equal_name_list[2];
+        if(equal_name_list[1] === 'datamodel')
+            equal_name = equal_name_list[2] + ':' + equal_name_list[3];
+        links.push({source: cur.name.replace(/[0-9]/g, ''), target: equal_name, group: 4});
     }
 }
 
