@@ -60,7 +60,7 @@ block content
                                 td
                                     each val in curitem.equalclass
                                         - tmp = val.split('/'); var domain = '公路'; if(tmp[1] === 'crbim') domain = '铁路';
-                                        a(href=val, class='badge badge-info', id='alink') #{domain}-#{tmp[2].replace(/[0-9]/g, '')}
+                                        a(href=val, class='badge badge-info', id='alink') #{domain}:#{tmp[2].replace(/[0-9]/g, '')}
                             tr
                                 td(width='20%', class='text-center') 备注
                                 if curitem.def !== 'undefined'

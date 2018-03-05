@@ -20,7 +20,7 @@ var ItemSchema = Schema(
 ItemSchema
     .virtual('url')
     .get(function () {
-        return '/catalog/ifc/' + this.name;
+        return '/datamodel/ifcrailway/' + this.name;
     });
 
 //Export model

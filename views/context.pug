@@ -55,8 +55,8 @@ block content
                                 td(width='20%', class='text-center') 等价
                                 td
                                     each val in curitem.equalclass
-                                        -var split = val.split('/'); var domain = "铁路"; if(split[2] === "roadifc") domain = "公路";
-                                        a(href="../.."+val, class='badge badge-primary', id='alink') #{domain}-#{split[3]}
+                                        -var split = val.split('/'); var domain = "铁路"; if(split[2] === "ifcroad") domain = "公路";
+                                        a(href="../.."+val, class='badge badge-primary', id='alink') #{domain}:#{split[3]}
 
 
                     div(class='tab-pane fade', id='nav-graph', role='tabpanel', aria-labelledby='nav-graph-tab')
