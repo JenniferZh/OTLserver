@@ -10,7 +10,8 @@ var ItemSchema = Schema(
         parent:{type:String},
         parent_list:{type:[String]},
         attr:{type:[String]},
-        attr_all:{type:[String]}
+        attr_all:{type:[String]},
+        equalclass:{type:[String]}
 
     }
 );

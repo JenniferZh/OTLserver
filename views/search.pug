@@ -8,8 +8,9 @@ block content
     each val in search_result
         div(class = 'row')
             div(class = 'alert alert-success p-3 col-md-10 offset-md-1' role=alert)
-                h4 #{val.name}
-                p 这里是一些描述
+                - tmp = val.name.replace(/[0-9]/g, '')
+                h4 #{tmp}
+                p #{val.from}
                 hr
                 a(href=val.url) http://www.cbims.org.cn#{val.url}
 
