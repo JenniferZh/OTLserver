@@ -51,6 +51,13 @@ block content
                                 td
                                     each val in curitem.attr
                                         span(class='badge badge-primary', id='alink') #{val}
+                            tr
+                                td(width='20%', class='text-center') 等价
+                                td
+                                    each val in curitem.equalclass
+                                        -var split = val.split('/'); var domain = "铁路"; if(split[2] == "roadifc") domain = "公路";
+                                        a(href="../.."+val, class='badge badge-primary', id='alink') #{domain}-#{split[3]}
+
 
                     div(class='tab-pane fade', id='nav-graph', role='tabpanel', aria-labelledby='nav-graph-tab')
                         script(src='/javascripts/graph.js')
