@@ -17,6 +17,7 @@ var classitem = require('./routes/classitems');
 var roadclassitem = require('./routes/roadclassitem');
 var api = require('./routes/api');
 var rules = require('./routes/rules');
+var scope = require('./routes/allscope');
 
 var app = express();
 
@@ -53,6 +54,7 @@ app.use('/crbim', classitem);
 app.use('/cccc', roadclassitem);
 app.use('/apidoc', api);
 app.use('/rules/road', rules);
+app.use('/allscope',scope);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -1,0 +1,73 @@
+extends layout
+
+block content
+    script window.cur = !{JSON.stringify(curitem)}
+    script window.child = !{JSON.stringify(child_item)}
+    div(class='container-fluid')
+        div(class='row')
+            nav(class='col-md-3 col-sm-4 bg-faded sidebar')
+
+                ul(class='nav nav-pills flex-column')
+
+
+                    li(class='nav-item')
+                        if parent_item !== null
+                            - tmp = parent_item.name
+                            a(class='nav-link', href=parent_item.url) #{tmp}
+                    li(class='nav-item')
+                        a(class='nav-link active', href=curitem.url)
+                            - tmp = curitem.name
+                            img(src="https://cdn.bootcss.com/open-iconic/1.1.1/png/chevron-right.png" alt='chevron-right')
+                            | #{tmp}
+
+                    each val in child_item
+                        - tmp = val.name
+                        li(class='nav-item', id="child")
+                            a(class='nav-link', href=val.url) #{tmp}
+
+            div(class='col-md-9 ml-sm-auto col-sm-8 pt-3')
+                h2(class="item-header") #{curitem.name.replace(/[0-9]/g, '')}
+                nav(class='nav nav-tabs pt-3', id='mytab', role='tablist')
+                    a(class='nav-item nav-link active', id='nav-info-tab', data-toggle="tab", href='#nav-info', role='tab', aria-controls='nav-info', aria-selected='true') 基本信息
+                    a(class='nav-item nav-link', id='nav-graph-tab', data-toggle="tab", href='#nav-graph', role='tab', aria-controls='nav-info', aria-selected='true') 图形显示
+                div(class='tab-content pt-3', id='nav-tabContent')
+                    div(class='tab-pane fade show active', id='nav-info', role='tabpanel', aria-labelledby='nav-info-tab')
+                        table(width="100%",class='namevalue')
+                            tr
+                                td(width="20%", class='text-center') 名称
+                                - tmp = curitem.name.replace(/[0-9]/g, '')
+                                td #{tmp}
+                            tr
+                                td(width='20%', class='text-center') URL
+                                td http://cbims.org.cn#{curitem.url}
+                            tr
+                                td(width='20%', class='text-center') 父类
+                                td
+                                    each val in parent_list
+                                        - tmp = val.name.replace(/[0-9]/g, '')
+                                        a(href=val.url, class='badge badge-primary', id='alink') #{tmp}
+                            tr
+                                td(width='20%', class='text-center') 子类
+                                td
+                                    each val in child_item
+                                        - tmp = val.name.replace(/[0-9]/g, '')
+                                        a(href=val.url, class='badge badge-info', id='alink') #{tmp}
+                            tr
+                                td(width='20%', class='text-center') 分类编码
+                                td #{curitem.code}
+                            tr
+                                td(width='20%', class='text-center') 等价类
+                                td
+                                    each val in curitem.equalclass
+                                        - tmp = val.split('/'); var domain = 'cccc'; if(tmp[1] === 'crbim') domain = 'crbim';
+                                        a(href=val, class='badge badge-info', id='alink') #{domain}:#{tmp[2].replace(/[0-9]/g, '')}
+                            tr
+                                td(width='20%', class='text-center') 备注
+                                if curitem.def !== 'undefined'
+                                    td #{curitem.def}
+
+
+                    div(class='tab-pane fade', id='nav-graph', role='tabpanel', aria-labelledby='nav-graph-tab')
+                        script(src='/javascripts/graph.js')
+
+
