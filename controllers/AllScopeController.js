@@ -1,5 +1,6 @@
 var AllScopes = require('../models/allscope');
-var RelationParent = require('../models/relationparent')
+var RelationParent = require('../models/relationparent');
+var RelationSame = require('../models/relationsame');
 
 //{name: {$in: person.parent_list}
 
@@ -38,7 +39,7 @@ exports.scope_item = function (req, res) {
                     resolve(null);
                 } else {
 
-                    child_list = rel.map(function(item) {
+                    var child_list = rel.map(function(item) {
                         return item.child;
                     });
 
@@ -49,18 +50,6 @@ exports.scope_item = function (req, res) {
             })
         });
     };
-    getItem(req.params.id).then(function resolve(result) {
-        console.log(result);
-    });
-
-    getParent(req.params.id).then(function resolve(result) {
-        //console.log(result);
-        res.send(result);
-    });
-    getChilds(req.params.id).then(function resolve(result) {
-        console.log("child", result);
-        //res.send(result);
-    });
 
 
     function addToPath(code, callback) {
@@ -91,10 +80,38 @@ exports.scope_item = function (req, res) {
         });
     }
 
-    getParentList(req.params.id).then(function resolve(result) {
-        console.log(result);
-        //res.send(result);
-    });
+    function getSame(code) {
+        return new Promise(function(resolve, reject) {
+            RelationSame.find({$or:[{a: code},{b: code}]}, function (err, item) {
+                if(item !== null) {
+                    var samelist = item.map(function (each) {
+                        if(each.a === code) return each.b;
+                        else return each.a;
+                    });
+                    AllScopes.find({code: {$in: samelist}}, function(err, result) {
+                        resolve(result);
+                    });
+
+                }
+                else {
+                    resolve(null);
+                }
+
+            });
+        })
+    }
+
+
+    var name = req.params.id;
+
+    Promise.all([getChilds(name), getParent(name), getItem(name), getParentList(name), getSame(name)]).then(function(values){
+
+
+
+        res.render('scope', { child_item: values[0], parent_item: values[1], curitem: values[2], parent_list: values[3], same_list: values[4]} );
+
+
+    }).catch(function(error){ console.log(error);});
 
     //res.render('classitem', { child_item: values[0], parent_item: values[1], curitem: values[2], parent_list: values[3]} );
 
