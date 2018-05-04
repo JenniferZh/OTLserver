@@ -40,8 +40,14 @@ block content
                                 - tmp = curitem.name
                                 td #{tmp}
                             tr
+                                td(width="20%", class='text-center') 领域
+                                td #{curitem.scope}
+                            tr
                                 td(width='20%', class='text-center') URL
                                 td http://cbims.org.cn#{curitem.url}
+                            tr
+                                td(width='20%', class='text-center') 分类编码
+                                td #{curitem.code}
                             tr
                                 td(width='20%', class='text-center') 父类
                                 td
@@ -55,11 +61,15 @@ block content
                                         - tmp = val.name
                                         a(href=val.url, class='badge badge-info', id='alink') #{tmp}
                             tr
-                                td(width='20%', class='text-center') 分类编码
-                                td #{curitem.code}
+                                td(width='20%', class='text-center') 等价类
+                                td
+                                    each val in same_list
+                                        - tmp = val.name
+                                        a(href=val.url, class='badge badge-success', id='alink') #{tmp}
+
 
 
                     div(class='tab-pane fade', id='nav-graph', style="width: 900px;height:600px;", role='tabpanel', aria-labelledby='nav-graph-tab')
-                        script(src='/javascripts/allscopegraph.js')
+                        script(src='/javascripts/allscopegraph.js', defer)
 
 

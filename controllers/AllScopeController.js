@@ -1,8 +1,12 @@
 var AllScopes = require('../models/allscope');
 var RelationParent = require('../models/relationparent');
 var RelationSame = require('../models/relationsame');
+var Common = require('./comcontroller');
+
 
 //{name: {$in: person.parent_list}
+
+
 
 exports.scope_item = function (req, res) {
 
@@ -14,27 +18,13 @@ exports.scope_item = function (req, res) {
         });
     };
 
-    var getParent = function (code) {
-        return new Promise(function(resolve, reject){
-            console.log(code);
-            RelationParent.findOne({child: code}, function(err, rel) {
+    var getParent = Common.getParent;
 
-                if(rel === null) {
-                    resolve(null);
-                } else {
-                    AllScopes.findOne({code: rel.parent}, function(err, parent) {
-                        resolve(parent);
-                    })
-                }
-            });
-
-        });
-    };
 
     var getChilds = function (code) {
         return new Promise(function(resolve, reject) {
             RelationParent.find({parent:code}, function(err, rel) {
-                //console.log("rel",rel);
+
                 if(rel === null) {
                     resolve(null);
                 } else {
@@ -80,26 +70,7 @@ exports.scope_item = function (req, res) {
         });
     }
 
-    function getSame(code) {
-        return new Promise(function(resolve, reject) {
-            RelationSame.find({$or:[{a: code},{b: code}]}, function (err, item) {
-                if(item !== null) {
-                    var samelist = item.map(function (each) {
-                        if(each.a === code) return each.b;
-                        else return each.a;
-                    });
-                    AllScopes.find({code: {$in: samelist}}, function(err, result) {
-                        resolve(result);
-                    });
-
-                }
-                else {
-                    resolve(null);
-                }
-
-            });
-        })
-    }
+    var getSame = Common.getSame;
 
 
     var name = req.params.id;
