@@ -35,3 +35,18 @@ block content
                 p
                     strong 返回数据说明：
                     |  name是条目名称；supertype是条目的父条目；subtypes是条目的所有直接子条目；code是其对应的分类编码；def是条目备注（如不存在，返回“undefined”）
+
+            div(class='bs-callout bs-callout-info')
+                h4 获取多领域数据信息
+                p
+                    strong URL：
+                    | /api/v1.0/AllScope/:classcode
+                p
+                    strong 方法：
+                    | GET
+                p
+                    strong 参数说明：
+                    | classcode即为需要获得的多领域分类编码条目的分类编码，例如：TL-51.15.80.37.00.00.00
+                p
+                    strong 返回数据说明：
+                    |  name是条目名称；parent是条目的父条目(json)；childs是条目的所有直接子条目(json array)；code是其对应的分类编码；scope是条目领域

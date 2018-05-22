@@ -9,5 +9,6 @@ var item_controller = require('../controllers/ItemController');
 router.get('/IFC/:itemName', item_controller.item_detail);
 router.get('/Classcode/:itemName', item_controller.classcode_detail);
 router.get('/Same/:itemName', item_controller.item_same);
+router.get('/AllScope/:itemName', item_controller.allscope_detail);
 
 module.exports = router;

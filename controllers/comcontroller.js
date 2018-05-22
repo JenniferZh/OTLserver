@@ -19,6 +19,28 @@ exports.getParent = function (code) {
     });
 };
 
+exports.getChilds = function (code) {
+    return new Promise(function(resolve, reject){
+
+        RelationParent.find({parent: code}, function(err, rel) {
+
+            if(rel === null) {
+                resolve(null);
+            } else {
+
+
+
+                AllScopes.find({code: {$in: rel.map(function (erel) {
+                    return erel.child;
+                })}}, function(err, childs) {
+                    resolve(childs);
+                });
+            }
+        });
+
+    });
+};
+
 exports.getSame = function (code) {
     return new Promise(function(resolve, reject) {
         RelationSame.find({$or:[{a: code},{b: code}]}, function (err, item) {
