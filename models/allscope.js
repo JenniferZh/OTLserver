@@ -15,7 +15,7 @@ var ScopeSchema = Schema(
 ScopeSchema
     .virtual('url')
     .get(function () {
-        return '/allscope/' + this.code;
+        return '/allscope/' + this.scope+"-"+this.code;
     });
 
 //Export model

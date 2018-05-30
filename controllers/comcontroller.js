@@ -10,7 +10,8 @@ exports.getParent = function (code) {
             if(rel === null) {
                 resolve(null);
             } else {
-                AllScopes.findOne({code: rel.parent}, function(err, parent) {
+
+                AllScopes.findOne({code: rel.parent.split('-')[1], scope: rel.parent.split('-')[0]}, function(err, parent) {
                     resolve(parent);
                 })
             }
@@ -49,10 +50,40 @@ exports.getSame = function (code) {
                     if(each.a === code) return each.b;
                     else return each.a;
                 });
-                AllScopes.find({code: {$in: samelist}}, function(err, result) {
-                    resolve(result);
+                console.log(item);
+
+
+                var conditions = samelist.map(function(s) {
+
+                    return {scope: s.split('-')[0], code: s.split('-')[1]};
+                });
+                console.log(conditions);
+
+                var promises = conditions.map(function(cond) {
+                    return new Promise(function(resolve, reject)
+                    {
+                        AllScopes.findOne(cond, function (err, result) {
+                            if(result !== null) {
+                                console.log("herr",result)
+                                resolve(result);
+                            }
+                            else {
+                                console.log("null")
+                                reject(null);
+                            }
+                        });
+                    });
                 });
 
+                console.log(promises)
+
+                Promise.all(promises).then(function (finalresult) {
+                    console.log("final")
+                   resolve(finalresult);
+                }).catch(function (reason) {
+                    console.log("final2")
+                    resolve(reason);
+                });
             }
             else {
                 resolve(null);

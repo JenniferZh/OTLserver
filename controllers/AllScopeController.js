@@ -11,8 +11,10 @@ var Common = require('./comcontroller');
 exports.scope_item = function (req, res) {
 
     var getItem = function(code) {
+        var scope = code.split('-')[0];
+        var ncode = code.split('-')[1];
         return new Promise(function(resolve, reject) {
-            AllScopes.findOne({code: code}, function(err, item) {
+            AllScopes.findOne({code: ncode, scope: scope}, function(err, item) {
                 resolve(item);
             });
         });
@@ -28,12 +30,13 @@ exports.scope_item = function (req, res) {
                 if(rel === null) {
                     resolve(null);
                 } else {
+                    var scope = code.split('-')[0];
 
                     var child_list = rel.map(function(item) {
-                        return item.child;
+                        return item.child.split('-')[1];
                     });
 
-                    AllScopes.find({code:{$in: child_list}}, function(err, childs) {
+                    AllScopes.find({scope:scope, code:{$in: child_list}}, function(err, childs) {
                         resolve(childs);
                     })
                 }
@@ -63,7 +66,11 @@ exports.scope_item = function (req, res) {
         return new Promise(function(resolve, reject) {
             parent_list = [];
             addToPath(code, function(err) {
-                AllScopes.find({code: {$in: parent_list}}, function(err, item) {
+                var scope = code.split('-')[0];
+                var parents = parent_list.map(function(p) {
+                    return p.split('-')[1];
+                });
+                AllScopes.find({code: {$in: parents}, scope: scope}, function(err, item) {
                     resolve(item);
                 });
             });

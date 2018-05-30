@@ -8,13 +8,11 @@ var expressValidator = require('express-validator');
 
 var index = require('./routes/index');
 var items = require('./routes/items');
-var contexts = require('./routes/contexts');
+
 var search = require('./routes/search');
 var mvd = require('./routes/mvds');
 var template = require('./routes/templates');
-var classcode = require('./routes/classes');
-var classitem = require('./routes/classitems');
-var roadclassitem = require('./routes/roadclassitem');
+
 var api = require('./routes/api');
 var rules = require('./routes/rules');
 var scope = require('./routes/allscope');
@@ -45,13 +43,11 @@ app.use(express.static('public'));
 
 app.use('/', index);
 app.use('/api/v1.0', items);
-app.use('/datamodel',contexts);
+
 app.use('/search', search);
 app.use('/mvd', mvd);
 app.use('/template', template);
-app.use('/classcode', classcode);
-app.use('/crbim', classitem);
-app.use('/cccc', roadclassitem);
+
 app.use('/apidoc', api);
 app.use('/rules/road', rules);
 app.use('/allscope',scope);
