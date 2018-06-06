@@ -1,0 +1,21 @@
+extends layout
+
+block content
+    form(class='offset-md-3 col-md-6' action='/upload' method='post')
+        div(class='form-row')
+            div(class="form-group col-md-8")
+                label(for="ifc") IFC类名
+                input(type='text' id='ifc' name='ifc' placeholder='输入IFC区分大小写的类名' class="form-control")
+            div(class="form-group col-md-4")
+                label(for="ifcscope") IFC领域
+                select(id='ifcscope' class='form-control' name='ifcscope')
+                    option IFCRAIL
+                    option IFCROAD
+        div(class="form-group")
+            label(for='code') 分类编码
+            input(type='text' id='code' name='code' placeholder='输入分类编码' class="form-control")
+        div(class="form-group")
+            label(for='upload') 提交码
+            input(type='password' id='upload' name='upload' placeholder='输入提交密码' class="form-control")
+
+        button(type='submit' class='btn btn-primary') 提交

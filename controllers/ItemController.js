@@ -1,6 +1,7 @@
 
 var AllScopes = require('../models/allscope');
 var RelationSame = require('../models/relationsame');
+var RelationMatch = require('../models/relationmatch');
 var common = require('./comcontroller');
 
 exports.item_same = function (req, res, next) {
@@ -43,5 +44,22 @@ exports.allscope_detail = function(req, res, next) {
 
        }
 
+    });
+};
+
+
+exports.get_match = function (req, res, next) {
+    var code = req.params.itemName;
+    RelationMatch.find({ifd: code}, function(err, item) {
+       if(err) {
+           res.send(null);
+       } else {
+           if(item.length) {
+               res.send(item[0]);
+           }
+           else {
+               res.send(null);
+           }
+       }
     });
 };
