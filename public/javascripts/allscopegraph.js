@@ -13,7 +13,7 @@ function generateLinks() {
     });
     //add parent
     if(parent !== null) {
-        console.log('haha');
+
         links.push({
             source:cur.name,
             target:parent.name,
@@ -163,3 +163,9 @@ option = {
 };
 
 myChart.setOption(option);
+
+myChart.on('click', function (param) {
+    var scope = param.name.replace(/:.+$/, "");
+    var url = "/allscope/"+scope + '-'+param.value;
+    window.location.href=url;
+});
