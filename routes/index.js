@@ -12,6 +12,10 @@ router.get('/manage', function(req, res, next) {
     res.render('Manager');
 });
 
+router.get('/data', function(req, res, next) {
+    res.render('data');
+});
+
 router.post('/upload', function(req, res, next) {
     var uploadcode = req.body.upload;
     if(!/^\w+-[A-Za-z0-9.]+$/.test(req.body.code)) {
