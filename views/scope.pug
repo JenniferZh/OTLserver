@@ -65,7 +65,8 @@ block content
                                 td
                                     each val in same_list
                                         - tmp = val.scope+":"+val.name
-                                        a(href=val.url, class='badge badge-success', id='alink') #{tmp}
+                                        if val.name
+                                            a(href=val.url, class='badge badge-success', id='alink') #{tmp}
 
 
 
