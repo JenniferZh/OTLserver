@@ -74,16 +74,19 @@ exports.getSame = function (code) {
                         });
                     });
                 });
+                console.log(promises);
 
-                console.log(promises)
+                const FAIL_TOKEN = {};
 
-                Promise.all(promises).then(function (finalresult) {
-                    console.log("final")
-                   resolve(finalresult);
-                }).catch(function (reason) {
-                    console.log("final2")
-                    resolve(reason);
-                });
+                const resolvedPromises = Promise.all(
+                    promises.map(p => p.catch(e => FAIL_TOKEN))
+                ).then(
+                    values => {
+                        values.filter(v => v !== FAIL_TOKEN);
+                        resolve(values);
+                    }
+                );
+
             }
             else {
                 resolve(null);

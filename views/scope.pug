@@ -64,7 +64,7 @@ block content
                                 td(width='20%', class='text-center') 等价类
                                 td
                                     each val in same_list
-                                        - tmp = val.name
+                                        - tmp = val.scope+":"+val.name
                                         a(href=val.url, class='badge badge-success', id='alink') #{tmp}
 
 
